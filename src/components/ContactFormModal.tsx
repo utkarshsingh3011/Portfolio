@@ -1,131 +1,58 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ContactFormModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface FormState {
-  name: string;
-  email: string;
-  message: string;
-}
-
-interface FormErrors {
-  name?: string;
-  email?: string;
-  message?: string;
-}
-
 export default function ContactFormModal({ isOpen, onClose }: ContactFormModalProps) {
-  const [form, setForm] = useState<FormState>({ name: "", email: "", message: "" });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
-  const [touched, setTouched] = useState<Record<keyof FormState, boolean>>({
-    name: false,
-    email: false,
-    message: false,
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
+  const [copied, setCopied] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
 
-  // Lock background scroll when open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") onClose();
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.body.style.overflow = "";
+        window.removeEventListener("keydown", handleKeyDown);
+      };
     }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
-  // Reset form when modal opens/closes
-  useEffect(() => {
-    if (!isOpen) {
-      // Delay reset slightly to let exit transition finish
-      const t = setTimeout(() => {
-        setForm({ name: "", email: "", message: "" });
-        setErrors({});
-        setStatus("idle");
-        setTouched({ name: false, email: false, message: false });
-      }, 400);
-      return () => clearTimeout(t);
-    }
-  }, [isOpen]);
-
-  const validate = (field?: keyof FormState): boolean => {
-    const newErrors: FormErrors = { ...errors };
-    let isValid = true;
-
-    // Email Regex Pattern
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!field || field === "name") {
-      if (!form.name.trim()) {
-        newErrors.name = "Please enter your name.";
-        isValid = false;
-      } else {
-        delete newErrors.name;
-      }
-    }
-
-    if (!field || field === "email") {
-      if (!form.email.trim()) {
-        newErrors.email = "Please enter your email.";
-        isValid = false;
-      } else if (!emailRegex.test(form.email)) {
-        newErrors.email = "Please enter a valid email address.";
-        isValid = false;
-      } else {
-        delete newErrors.email;
-      }
-    }
-
-    if (!field || field === "message") {
-      if (!form.message.trim()) {
-        newErrors.message = "Please write a message.";
-        isValid = false;
-      } else if (form.message.trim().length < 10) {
-        newErrors.message = "Message must be at least 10 characters long.";
-        isValid = false;
-      } else {
-        delete newErrors.message;
-      }
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    if (touched[name as keyof FormState]) {
-      // Validate in real-time once field has been touched/edited
-      setTimeout(() => validate(name as keyof FormState), 0);
-    }
-  };
-
-  const handleBlur = (field: keyof FormState) => {
-    setTouched((prev) => ({ ...prev, [field]: true }));
-    validate(field);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLaunchEmail = (e: React.FormEvent) => {
     e.preventDefault();
+    const subject = encodeURIComponent(
+      formData.subject || `Message from ${formData.name || "Portfolio Visitor"}`
+    );
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    );
+    window.location.href = `mailto:ustsingh@gmail.com?subject=${subject}&body=${body}`;
+    setSubmitted(true);
+  };
 
-    // Mark all as touched
-    setTouched({ name: true, email: true, message: true });
+  const handleCopyMessage = () => {
+    const text = `From: ${formData.name} (${formData.email})\nSubject: ${formData.subject}\n\n${formData.message}`;
+    navigator.clipboard.writeText(text);
+    setCopied("message");
+    setTimeout(() => setCopied(null), 2800);
+  };
 
-    const isValid = validate();
-    if (!isValid) return;
-
-    setStatus("submitting");
-
-    // Simulate API submission latency
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setStatus("success");
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText("ustsingh@gmail.com");
+    setCopied("email");
+    setTimeout(() => setCopied(null), 2800);
   };
 
   return (
@@ -135,202 +62,169 @@ export default function ContactFormModal({ isOpen, onClose }: ContactFormModalPr
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.35 }}
-          className="fixed inset-0 z-[9990] flex h-screen w-screen items-center justify-center bg-bg/85 px-4 backdrop-blur-2xl"
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-[9995] flex items-center justify-center bg-bg/85 p-4 backdrop-blur-xl sm:p-6"
+          onClick={onClose}
         >
-          {/* Main Modal Card */}
           <motion.div
-            initial={{ y: 50, opacity: 0, scale: 0.95 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: 50, opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
-            className="relative w-full max-w-[540px] rounded-3xl border border-stroke bg-surface p-8 shadow-2xl md:p-10"
+            initial={{ scale: 0.96, opacity: 0, y: 15 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.96, opacity: 0, y: 15 }}
+            transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+            className="relative max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-3xl border border-white/10 bg-surface/95 p-6 shadow-2xl shadow-black/80 backdrop-blur-2xl sm:p-8"
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Floating Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute right-6 top-6 group relative flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-bg text-muted transition duration-300 hover:border-white/20 hover:text-text-primary"
-              data-cursor="close"
-              aria-label="Close modal"
-            >
-              <span className="text-xl leading-none">&times;</span>
-            </button>
-
-            {status !== "success" ? (
-              <>
-                {/* Header */}
-                <div className="mb-8 pr-8">
-                  <h2 className="font-body text-3xl font-medium text-text-primary">
-                    Let's collaborate <span className="font-display italic">online</span>
-                  </h2>
-                  <p className="mt-2.5 text-sm leading-6 text-muted">
-                    Have an idea, project, or role in mind? Drop me a message and I'll get back to you within 24 hours.
-                  </p>
-                </div>
-
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  {/* Name Input */}
-                  <div>
-                    <label htmlFor="name" className="block text-[10px] uppercase tracking-widest text-muted mb-2">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      onBlur={() => handleBlur("name")}
-                      disabled={status === "submitting"}
-                      className={`w-full rounded-xl border bg-bg/40 px-4 py-3 text-sm text-text-primary placeholder:text-muted/40 outline-none transition duration-300 focus:border-text-primary/30 ${
-                        errors.name ? "border-red-500/50" : "border-stroke focus:border-white/25"
-                      }`}
-                      placeholder="Jane Doe"
-                    />
-                    <AnimatePresence>
-                      {errors.name && (
-                        <motion.span
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-1.5 block text-xs text-red-400"
-                        >
-                          {errors.name}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Email Input */}
-                  <div>
-                    <label htmlFor="email" className="block text-[10px] uppercase tracking-widest text-muted mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      onBlur={() => handleBlur("email")}
-                      disabled={status === "submitting"}
-                      className={`w-full rounded-xl border bg-bg/40 px-4 py-3 text-sm text-text-primary placeholder:text-muted/40 outline-none transition duration-300 focus:border-text-primary/30 ${
-                        errors.email ? "border-red-500/50" : "border-stroke focus:border-white/25"
-                      }`}
-                      placeholder="jane@company.com"
-                    />
-                    <AnimatePresence>
-                      {errors.email && (
-                        <motion.span
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-1.5 block text-xs text-red-400"
-                        >
-                          {errors.email}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Message Input */}
-                  <div>
-                    <label htmlFor="message" className="block text-[10px] uppercase tracking-widest text-muted mb-2">
-                      Your Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={4}
-                      value={form.message}
-                      onChange={handleChange}
-                      onBlur={() => handleBlur("message")}
-                      disabled={status === "submitting"}
-                      className={`w-full rounded-xl border bg-bg/40 px-4 py-3 text-sm text-text-primary placeholder:text-muted/40 outline-none transition duration-300 focus:border-text-primary/30 resize-none ${
-                        errors.message ? "border-red-500/50" : "border-stroke focus:border-white/25"
-                      }`}
-                      placeholder="Hi Utkarsh, I'd love to chat about..."
-                    />
-                    <AnimatePresence>
-                      {errors.message && (
-                        <motion.span
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-1.5 block text-xs text-red-400"
-                        >
-                          {errors.message}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={status === "submitting"}
-                    className="group relative w-full rounded-xl p-[2px]"
-                  >
-                    <span className="animated-gradient-border absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:animate-gradient-shift group-hover:opacity-100" />
-                    <span className="relative flex w-full items-center justify-center gap-2 rounded-xl bg-text-primary px-6 py-3.5 text-sm font-medium text-bg transition duration-300 group-hover:bg-bg group-hover:text-text-primary">
-                      {status === "submitting" ? (
-                        <>
-                          <svg className="size-4 animate-spin text-current" viewBox="0 0 24 24" fill="none">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                          </svg>
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          Send message <span aria-hidden="true">↗</span>
-                        </>
-                      )}
-                    </span>
-                  </button>
-                </form>
-              </>
-            ) : (
-              /* Success Panel */
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4 }}
-                className="flex flex-col items-center py-8 text-center"
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-stroke/70 pb-4">
+              <span className="text-xs font-mono text-muted">Get in touch</span>
+              <button
+                onClick={onClose}
+                className="grid size-8 place-items-center rounded-full border border-stroke bg-bg/80 text-muted transition hover:border-white/40 hover:text-text-primary"
+                aria-label="Close contact dialog"
               >
-                {/* Glowing checkmark container */}
-                <div className="relative mb-6 flex size-16 items-center justify-center rounded-full bg-[#89aacc]/15">
-                  <span className="accent-gradient absolute inset-0 rounded-full opacity-20 blur-[6px]" />
-                  <motion.svg
-                    className="size-8 text-[#89aacc]"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
-                  >
-                    <motion.path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </motion.svg>
+                &times;
+              </button>
+            </div>
+
+            {/* Introduction */}
+            <div className="mt-5">
+              <h3 className="font-display text-3xl italic text-text-primary md:text-4xl">
+                Let's talk.
+              </h3>
+              <p className="mt-2 text-xs md:text-sm text-muted leading-relaxed">
+                Send an email directly or pre-fill the form below. I'm open to discussing software projects, cybersecurity labs, IoT builds, and engineering opportunities.
+              </p>
+            </div>
+
+            {/* Quick Email Direct Copy Bar */}
+            <div className="mt-5 flex items-center justify-between rounded-2xl border border-stroke bg-bg/60 p-3.5">
+              <div className="flex items-center gap-2 font-mono text-xs text-text-primary truncate">
+                <span className="text-muted">Email:</span>
+                <span className="font-medium text-[#89aacc]">ustsingh@gmail.com</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="shrink-0 rounded-full border border-stroke bg-surface px-3 py-1 font-mono text-[11px] text-text-primary transition hover:border-white/30"
+              >
+                {copied === "email" ? "Copied ✓" : "Copy email"}
+              </button>
+            </div>
+
+            {/* Contact Form */}
+            <form onSubmit={handleLaunchEmail} className="mt-6 space-y-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-mono text-muted mb-1.5">
+                    Your name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Alex Chen"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full rounded-xl border border-stroke bg-bg/80 px-4 py-2.5 font-mono text-xs text-text-primary placeholder:text-muted/50 focus:border-[#89aacc] focus:outline-none transition"
+                  />
                 </div>
 
-                <h2 className="font-body text-3xl font-medium text-text-primary">
-                  Message <span className="font-display italic">sent!</span>
-                </h2>
-                <p className="mx-auto mt-3 max-w-[280px] text-sm leading-6 text-muted">
-                  Thank you for reaching out, Jane. I'll get back to you as soon as possible.
-                </p>
+                <div>
+                  <label className="block text-xs font-mono text-muted mb-1.5">
+                    Your email *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="alex@example.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full rounded-xl border border-stroke bg-bg/80 px-4 py-2.5 font-mono text-xs text-text-primary placeholder:text-muted/50 focus:border-[#89aacc] focus:outline-none transition"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-muted mb-1.5">
+                  Subject
+                </label>
+                <input
+                  type="text"
+                  placeholder="Project Collaboration / Opportunity"
+                  value={formData.subject}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  className="w-full rounded-xl border border-stroke bg-bg/80 px-4 py-2.5 font-mono text-xs text-text-primary placeholder:text-muted/50 focus:border-[#89aacc] focus:outline-none transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-muted mb-1.5">
+                  Message *
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="Share what you'd like to build, discuss, or collaborate on..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  className="w-full resize-none rounded-xl border border-stroke bg-bg/80 px-4 py-2.5 font-mono text-xs text-text-primary placeholder:text-muted/50 focus:border-[#89aacc] focus:outline-none transition"
+                />
+              </div>
+
+              {submitted && (
+                <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/30 p-3 font-mono text-xs text-emerald-300">
+                  ✓ Email client launched with pre-filled message. You can also copy the message text below.
+                </div>
+              )}
+
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-3">
+                <button
+                  type="button"
+                  onClick={handleCopyMessage}
+                  disabled={!formData.message}
+                  className="rounded-full border border-stroke bg-bg/60 px-4 py-2.5 font-mono text-xs text-muted hover:text-text-primary transition disabled:opacity-40"
+                >
+                  {copied === "message" ? "Copied to clipboard ✓" : "Copy message text"}
+                </button>
 
                 <button
-                  onClick={onClose}
-                  className="mt-8 rounded-full border border-stroke bg-bg/50 px-6 py-2.5 text-xs font-medium uppercase tracking-wider text-text-primary transition hover:border-text-primary/30"
+                  type="submit"
+                  className="group relative inline-flex rounded-full p-[2px] cursor-pointer"
                 >
-                  Close Window
+                  <span className="animated-gradient-border absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:animate-gradient-shift group-hover:opacity-100" />
+                  <span className="relative flex items-center gap-2 rounded-full bg-text-primary px-6 py-2.5 font-mono text-xs font-medium text-bg transition group-hover:bg-bg group-hover:text-text-primary">
+                    Open in email ↗
+                  </span>
                 </button>
-              </motion.div>
-            )}
+              </div>
+            </form>
+
+            {/* Social Direct Links */}
+            <div className="mt-6 flex items-center justify-center gap-6 border-t border-stroke/70 pt-5 font-mono text-xs text-muted">
+              <a
+                href="https://github.com/utkarshsingh3011"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-text-primary transition"
+              >
+                GitHub ↗
+              </a>
+              <span>•</span>
+              <a
+                href="https://www.linkedin.com/in/utkarshsingh3011"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-text-primary transition"
+              >
+                LinkedIn ↗
+              </a>
+              <span>•</span>
+              <a
+                href="mailto:ustsingh@gmail.com"
+                className="hover:text-text-primary transition"
+              >
+                ustsingh@gmail.com
+              </a>
+            </div>
           </motion.div>
         </motion.div>
       )}

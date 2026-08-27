@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 export default function CustomCursor() {
   const [hoverType, setHoverType] = useState<"default" | "link" | "view" | "close">("default");
   const [isMobile, setIsMobile] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   // Position values for the cursor
   const mouseX = useMotionValue(-100);
@@ -15,12 +16,12 @@ export default function CustomCursor() {
   const ringY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
-    // Check if device supports hover/coarse pointer
-    const mediaQuery = window.matchMedia("(pointer: coarse)");
-    setIsMobile(mediaQuery.matches);
+    // Check if device supports fine pointer (mouse/trackpad)
+    const mediaQuery = window.matchMedia("(pointer: fine)");
+    setIsMobile(!mediaQuery.matches);
 
     const handleMediaChange = (e: MediaQueryListEvent) => {
-      setIsMobile(e.matches);
+      setIsMobile(!e.matches);
     };
 
     mediaQuery.addEventListener("change", handleMediaChange);
@@ -35,6 +36,15 @@ export default function CustomCursor() {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
+      if (!isVisible) setIsVisible(true);
+    };
+
+    const handleMouseLeave = () => {
+      setIsVisible(false);
+    };
+
+    const handleMouseEnter = () => {
+      setIsVisible(true);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -57,15 +67,19 @@ export default function CustomCursor() {
     };
 
     window.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("mouseenter", handleMouseEnter);
     window.addEventListener("mouseover", handleMouseOver, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("mouseenter", handleMouseEnter);
       window.removeEventListener("mouseover", handleMouseOver);
     };
-  }, [isMobile, mouseX, mouseY]);
+  }, [isMobile, isVisible, mouseX, mouseY]);
 
-  if (isMobile) return null;
+  if (isMobile || !isVisible) return null;
 
   // Variants for outer ring sizing and style based on hover type
   const ringVariants = {
@@ -77,23 +91,23 @@ export default function CustomCursor() {
       borderWidth: 1,
     },
     link: {
-      width: 56,
-      height: 56,
+      width: 54,
+      height: 54,
       backgroundColor: "rgba(137, 170, 204, 0.1)",
       borderColor: "rgba(137, 170, 204, 0.7)",
       borderWidth: 1,
       scale: 1.05,
     },
     view: {
-      width: 80,
-      height: 80,
+      width: 76,
+      height: 76,
       backgroundColor: "rgba(137, 170, 204, 0.95)",
       borderColor: "rgba(137, 170, 204, 0.95)",
       borderWidth: 0,
     },
     close: {
-      width: 80,
-      height: 80,
+      width: 76,
+      height: 76,
       backgroundColor: "rgba(255, 255, 255, 0.95)",
       borderColor: "rgba(255, 255, 255, 0.95)",
       borderWidth: 0,
@@ -134,7 +148,7 @@ export default function CustomCursor() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.6 }}
               transition={{ duration: 0.15 }}
-              className="font-body text-[10px] font-bold tracking-widest text-[#0a0a0a]"
+              className="font-mono text-[9px] font-bold tracking-widest text-[#0a0a0a]"
             >
               VIEW
             </motion.span>
@@ -145,7 +159,7 @@ export default function CustomCursor() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.6 }}
               transition={{ duration: 0.15 }}
-              className="font-body text-[10px] font-bold tracking-widest text-[#0a0a0a]"
+              className="font-mono text-[9px] font-bold tracking-widest text-[#0a0a0a]"
             >
               CLOSE
             </motion.span>

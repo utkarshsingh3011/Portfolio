@@ -1,0 +1,103 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 1240 >>
+stream
+BT
+/F2 22 Tf
+50 740 Td
+(UTKARSH SINGH) Tj
+/F1 11 Tf
+0 -18 Td
+(B.Tech Electronics & Communication Engineering | Jaypee Institute of Information Technology (JIIT), Noida) Tj
+0 -14 Td
+(Email: ustsingh@gmail.com | GitHub: github.com/utkarshsingh3011 | Location: Noida, India) Tj
+0 -25 Td
+/F2 13 Tf
+(ENGINEERING PROFILE) Tj
+/F1 10 Tf
+0 -14 Td
+(Full-stack developer, cybersecurity enthusiast, and ECE engineering student building secure software,) Tj
+0 -12 Td
+(interactive cybersecurity simulation platforms, ESP32 IoT systems, and scalable web applications.) Tj
+0 -22 Td
+/F2 13 Tf
+(CORE SKILLS) Tj
+/F1 10 Tf
+0 -14 Td
+(Languages: Python, TypeScript, JavaScript, C/C++, SQL) Tj
+0 -12 Td
+(Frontend: React, Next.js, Tailwind CSS, HTML5, CSS3, Framer Motion) Tj
+0 -12 Td
+(Backend & APIs: Node.js, Express, FastAPI, Flask, REST APIs, JWT Authentication) Tj
+0 -12 Td
+(Databases & Tools: PostgreSQL, MongoDB, Docker, Git, GitHub, Linux, Postman) Tj
+0 -12 Td
+(Cybersecurity & IoT: Web Security, Stored XSS, ESP32, Sensor Telemetry, Hardware Integration) Tj
+0 -22 Td
+/F2 13 Tf
+(FEATURED ENGINEERING PROJECTS) Tj
+/F1 10 Tf
+0 -14 Td
+(1. Sentinel - Interactive Cybersecurity Learning Platform (Next.js, TypeScript, Tailwind, Gemini API)) Tj
+0 -12 Td
+(   Guided vulnerability labs and real-time attack/defense simulations for cybersecurity education.) Tj
+0 -14 Td
+(2. XSS-Guard-Lab - Stored XSS Security Lab (Python, Flask, Web Security, OWASP)) Tj
+0 -12 Td
+(   Educational cybersecurity lab demonstrating Stored XSS attack vectors and secure remediation.) Tj
+0 -14 Td
+(3. Sentinel Edge - ESP32 IoT Monitoring System (ESP32, Python, FastAPI, Next.js)) Tj
+0 -12 Td
+(   Hardware-to-cloud environmental telemetry pipeline streaming live sensor metrics to a web dashboard.) Tj
+0 -14 Td
+(4. EdgeKart - Embedded Systems Marketplace (React, Node.js, Express, MongoDB, JWT)) Tj
+0 -12 Td
+(   Full-stack MERN e-commerce platform for electronics components with auth and admin dashboard.) Tj
+0 -14 Td
+(5. PortFlow - Customs Broker Onboarding Platform (React, TypeScript, FastAPI, PostgreSQL, Docker)) Tj
+0 -12 Td
+(   Production-inspired multi-stage customer onboarding and compliance tracking workflow platform.) Tj
+0 -14 Td
+(6. SafeSteps - Digital Safety Education Platform (React, Firebase, Google Maps, Tailwind CSS)) Tj
+0 -12 Td
+(   Interactive platform teaching digital safety with emergency assistance workflows.) Tj
+0 -22 Td
+/F2 13 Tf
+(EDUCATION) Tj
+/F1 10 Tf
+0 -14 Td
+(Jaypee Institute of Information Technology (JIIT), Noida) Tj
+0 -12 Td
+(B.Tech in Electronics & Communication Engineering (2025 - Present)) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000244 00000 n 
+0000001538 00000 n 
+0000001609 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+1685
+%%EOF

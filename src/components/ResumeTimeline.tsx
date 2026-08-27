@@ -1,171 +1,184 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
-interface Job {
-  company: string;
+interface Milestone {
   role: string;
+  category: string;
   period: string;
-  location: string;
+  institutionOrContext: string;
   description: string[];
   skills: string[];
 }
 
-const EXPERIENCES: Job[] = [
+const MILESTONES: Milestone[] = [
   {
-    company: "Stealth AI Startup",
-    role: "Lead Fullstack Engineer & Founder",
-    period: "2024 — Present",
-    location: "Chicago, IL (Hybrid)",
+    role: "B.Tech in Electronics & Communication Engineering",
+    category: "Education",
+    institutionOrContext: "Jaypee Institute of Information Technology (JIIT), Noida",
+    period: "2025 – Present",
     description: [
-      "Architected and built a real-time collaborative canvas for generative design using React, Next.js, and WebSockets.",
-      "Optimized WebGL-based vector rendering, reducing latency by 45% and supporting 10,000+ simultaneous elements.",
-      "Designed and deployed a serverless backend API in Go, orchestrating asynchronous GPU inference pipelines.",
+      "Studying Electronics & Communication Engineering with a focus on computer systems, software development, and cybersecurity.",
+      "Building practical foundations across digital electronics, computer networks, data structures, and hardware-software interfacing.",
+      "Applying classroom fundamentals directly to software projects, vulnerability labs, and microcontroller telemetry.",
     ],
-    skills: ["React", "Next.js", "Go", "WebGL", "TypeScript", "Tailwind", "WebRTC", "PostgreSQL"],
+    skills: ["ECE", "Digital Electronics", "Computer Networks", "C / C++", "Microcontrollers", "Data Structures"],
   },
   {
-    company: "Vortex Creative Agency",
-    role: "Senior Creative Developer",
-    period: "2022 — 2024",
-    location: "Chicago, IL",
+    role: "Cybersecurity Platforms & Interactive Labs",
+    category: "Cybersecurity",
+    institutionOrContext: "Sentinel & XSS-Guard-Lab",
+    period: "2026",
     description: [
-      "Led front-end development for award-winning immersive marketing campaigns and luxury brand portfolios.",
-      "Specialized in high-fidelity 3D interactive graphics (Three.js/GLSL) and GSAP scroll animations, earning 4 Awwwards site-of-the-day recognitions.",
-      "Mentored 4 junior engineers on animation standards, motion design, and semantic HTML best practices.",
+      "Built Sentinel, an interactive learning platform that simulates cyber attack scenarios using state machines and guided hints.",
+      "Developed XSS-Guard-Lab, an educational Stored XSS sandbox contrasting vulnerable endpoints with secure sanitization and CSP headers.",
+      "Focused on making security concepts clear and visual without exposing real infrastructure to risks.",
     ],
-    skills: ["Three.js", "GSAP", "GLSL", "React", "TypeScript", "Vite", "Framer Motion", "Tailwind"],
+    skills: ["Web Security", "Stored XSS", "Next.js", "Python", "Flask", "OWASP", "Framer Motion"],
   },
   {
-    company: "Apex Tech Corp",
-    role: "Product Engineer",
-    period: "2020 — 2022",
-    location: "Remote",
+    role: "Full-Stack Web Applications",
+    category: "Full-Stack",
+    institutionOrContext: "EdgeKart & PortFlow",
+    period: "2026",
     description: [
-      "Owned client-facing dashboard features for an enterprise analytics suite with over 150k monthly active users.",
-      "Built and co-maintained the company's internal Tailwind-based design system, facilitating rapid component assembly.",
-      "Improved Lighthouse performance scores by 35 points through bundle splitting, dynamic imports, and asset optimization.",
+      "Created EdgeKart, an e-commerce platform for electronics parts and sensors with user authentication and cart management.",
+      "Built PortFlow, a customs broker onboarding platform with multi-step form workflows, document verification, and PostgreSQL schemas.",
+      "Focused on clean component architecture, reliable authentication, and REST API design.",
     ],
-    skills: ["React", "Redux Toolkit", "TypeScript", "GraphQL", "Sass", "Cypress", "Webpack"],
+    skills: ["React", "TypeScript", "Node.js", "Express", "MongoDB", "FastAPI", "PostgreSQL", "Docker"],
   },
   {
-    company: "InnoLab Research",
-    role: "Software Developer",
-    period: "2018 — 2020",
-    location: "Champaign, IL",
+    role: "ESP32 Hardware & Cloud Telemetry",
+    category: "Embedded & IoT",
+    institutionOrContext: "Sentinel Edge",
+    period: "2026",
     description: [
-      "Engineered prototypes and visual interfaces for spatial datasets using D3.js and Leaflet.",
-      "Collaborated with UX researchers to design and execute interface usability studies, resulting in a 20% increase in task completion rates.",
-      "Developed a Python/Flask microservice for parsing high-resolution geospatial logs, saving 12 hours of manual analysis per week.",
+      "Built Sentinel Edge, an end-to-end IoT monitoring pipeline connecting ESP32 environmental sensors to a live web dashboard.",
+      "Wrote microcontroller firmware for sensor polling and an asynchronous FastAPI backend for real-time data ingestion.",
+      "Designed a live dashboard with metric charts, visual gauges, and threshold alerts.",
     ],
-    skills: ["Vue.js", "D3.js", "Python", "Flask", "Docker", "Sass", "Git"],
+    skills: ["ESP32", "Sensors", "Python", "FastAPI", "Next.js", "IoT Telemetry", "REST APIs"],
+  },
+  {
+    role: "Ongoing Projects & Exploration",
+    category: "Current Focus",
+    institutionOrContext: "Independent Exploration",
+    period: "Present",
+    description: [
+      "Continuing to explore web security, defensive coding practices, and distributed systems.",
+      "Building practical tools at the intersection of embedded microcontrollers, cybersecurity, and modern full-stack web applications.",
+    ],
+    skills: ["Web Security", "System Architecture", "Linux", "Git", "Algorithms", "Cloud Deployment"],
   },
 ];
 
 export default function ResumeTimeline() {
-  const [activeJobIndex, setActiveJobIndex] = useState<number>(0);
+  const [activeMilestoneIndex, setActiveMilestoneIndex] = useState<number>(0);
 
   const stats = [
-    ["20+", "Years Experience"],
-    ["95+", "Projects Done"],
-    ["200%", "Satisfied Clients"],
+    { number: "2025", label: "Started B.Tech", detail: "ECE @ JIIT Noida" },
+    { number: "6", label: "Projects Built", detail: "Web, Security, IoT" },
+    { number: "15+", label: "Technologies", detail: "Software & Hardware" },
+    { number: "ECE", label: "Degree Focus", detail: "Hardware + Software" },
   ];
 
   return (
-    <section id="resume" className="bg-bg py-20 md:py-28 border-t border-stroke">
-      <div className="mx-auto max-w-[1200px] px-6 md:px-10 lg:px-16">
-        
-        {/* Section Header */}
+    <section id="journey" className="relative bg-bg py-20 md:py-28 border-t border-stroke overflow-hidden">
+      <div className="tech-dots absolute inset-0 opacity-20 pointer-events-none" />
+
+      <div className="relative z-10 mx-auto max-w-[1200px] px-6 md:px-10 lg:px-16">
         <div className="mb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
-            <div className="mb-4 flex items-center gap-4">
-              <span className="h-px w-8 bg-stroke" />
-              <p className="text-xs uppercase tracking-[0.3em] text-muted">Resume</p>
-            </div>
+            <p className="text-xs uppercase tracking-[0.25em] text-muted mb-3">Background</p>
             <h2 className="text-balance font-body text-4xl font-medium tracking-normal text-text-primary md:text-6xl">
-              Professional <span className="font-display italic">experience</span>
+              My <span className="font-display italic">journey</span>
             </h2>
-            <p className="mt-4 max-w-lg text-sm leading-7 text-muted md:text-base">
-              A timeline of my professional experience, key achievements, and core technologies.
+            <p className="mt-4 max-w-xl text-sm leading-7 text-muted md:text-base">
+              A timeline of my studies at JIIT Noida, personal software projects, cybersecurity labs, and hardware builds.
             </p>
           </div>
+
           <a
-            href="mailto:ustsingh@gmail.com"
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            download="Utkarsh_Singh_Resume.pdf"
             className="group relative inline-flex self-start md:self-auto rounded-full p-[2px]"
             data-cursor="link"
+            aria-label="Download Utkarsh Singh resume PDF"
           >
             <span className="animated-gradient-border absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:animate-gradient-shift group-hover:opacity-100" />
-            <span className="relative flex items-center gap-1.5 rounded-full bg-surface px-5 py-3 text-sm text-text-primary backdrop-blur-md">
-              Download CV <span aria-hidden="true">↓</span>
+            <span className="relative flex items-center gap-2 rounded-full border border-stroke bg-surface px-5 py-3 font-mono text-xs text-text-primary backdrop-blur-md transition group-hover:border-transparent">
+              Download résumé ↓
             </span>
           </a>
         </div>
 
-        {/* Content Grid */}
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-          
-          {/* Left Column: Stats Sidebar */}
-          <div className="flex flex-col gap-8 lg:col-span-4 lg:sticky lg:top-28 lg:h-fit">
-            {stats.map(([number, label]) => (
+          {/* Left Side: Stats */}
+          <div className="flex flex-col gap-6 lg:col-span-4 lg:sticky lg:top-28 lg:h-fit">
+            {stats.map((stat, sIdx) => (
               <motion.div
-                key={label}
-                className="border-t border-stroke pt-6"
+                key={stat.label}
+                className="rounded-2xl border border-stroke bg-surface/30 p-5 md:p-6 backdrop-blur-sm transition-colors hover:border-white/20 hover:bg-surface/50"
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{ duration: 0.5, delay: sIdx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
                 viewport={{ once: true, margin: "-60px" }}
               >
-                <p className="font-display text-5xl italic text-text-primary md:text-6xl">{number}</p>
-                <p className="mt-2 text-xs uppercase tracking-[0.22em] text-muted">{label}</p>
+                <div className="flex items-baseline justify-between">
+                  <p className="font-display text-4xl italic text-text-primary md:text-5xl">{stat.number}</p>
+                  <span className="font-mono text-[10px] text-muted tracking-wider uppercase">{stat.detail}</span>
+                </div>
+                <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-muted">{stat.label}</p>
               </motion.div>
             ))}
           </div>
 
-          {/* Right Column: Interactive Timeline */}
+          {/* Right Side: Timeline */}
           <div className="lg:col-span-8">
-            <div className="relative border-l border-stroke pl-6 md:pl-8 space-y-8">
-              
-              {/* Timeline Items */}
-              {EXPERIENCES.map((job, idx) => {
-                const isActive = activeJobIndex === idx;
+            <div className="relative border-l border-stroke/70 pl-6 md:pl-8 space-y-6">
+              {MILESTONES.map((item, idx) => {
+                const isActive = activeMilestoneIndex === idx;
 
                 return (
-                  <div key={job.company} className="relative group/item">
-                    
-                    {/* Glowing Bullet Dot */}
+                  <div key={item.role} className="relative group/item">
+                    {/* Node Dot */}
                     <div
-                      onClick={() => setActiveJobIndex(idx)}
-                      className={`absolute -left-[31px] md:-left-[39px] top-1.5 size-4 rounded-full border-2 transition-all duration-300 cursor-pointer ${
+                      onClick={() => setActiveMilestoneIndex(idx)}
+                      className={`absolute -left-[31px] md:-left-[39px] top-2 size-4 rounded-full border-2 transition-all duration-300 cursor-pointer ${
                         isActive
-                          ? "bg-text-primary border-text-primary scale-125 shadow-[0_0_12px_rgba(255,255,255,0.4)]"
+                          ? "bg-[#89aacc] border-[#89aacc] scale-125 shadow-[0_0_14px_rgba(137,170,204,0.6)]"
                           : "bg-bg border-stroke hover:border-text-primary"
                       }`}
                     />
 
-                    {/* Timeline Card */}
-                    <div 
-                      onClick={() => setActiveJobIndex(idx)}
+                    {/* Milestone Card */}
+                    <div
+                      onClick={() => setActiveMilestoneIndex(idx)}
                       className={`rounded-2xl border p-5 md:p-6 transition-all duration-300 cursor-pointer ${
-                        isActive 
-                          ? "bg-surface border-stroke shadow-xl shadow-black/20" 
-                          : "bg-surface/10 border-transparent hover:bg-surface/30 hover:border-stroke/50"
+                        isActive
+                          ? "bg-surface/90 border-white/20 shadow-xl shadow-black/30"
+                          : "bg-surface/20 border-stroke/60 hover:bg-surface/40 hover:border-stroke"
                       }`}
                     >
-                      {/* Header */}
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                         <div>
+                          <span className="font-mono text-[11px] tracking-wider text-[#89aacc] block mb-1">
+                            {item.category}
+                          </span>
                           <h3 className="text-lg font-medium text-text-primary md:text-xl">
-                            {job.role}
+                            {item.role}
                           </h3>
-                          <p className="mt-1 text-sm font-light text-muted">
-                            <span className="font-medium text-text-primary/95">{job.company}</span> &middot; {job.location}
+                          <p className="mt-1 text-sm text-muted">
+                            <span className="font-medium text-text-primary/90">{item.institutionOrContext}</span>
                           </p>
                         </div>
-                        <span className="text-xs uppercase tracking-wider text-muted shrink-0 md:text-right">
-                          {job.period}
+                        <span className="font-mono text-xs text-muted shrink-0 md:text-right">
+                          {item.period}
                         </span>
                       </div>
 
-                      {/* Detail Collapsible Section */}
                       <AnimatePresence initial={false}>
                         {isActive && (
                           <motion.div
@@ -175,23 +188,21 @@ export default function ResumeTimeline() {
                             transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
                             className="overflow-hidden"
                           >
-                            <div className="mt-5 border-t border-stroke pt-4 space-y-3">
-                              {/* Achievements List */}
+                            <div className="mt-5 border-t border-stroke/60 pt-4 space-y-3">
                               <ul className="list-none space-y-2.5">
-                                {job.description.map((bullet, bIdx) => (
+                                {item.description.map((bullet, bIdx) => (
                                   <li key={bIdx} className="flex items-start gap-2.5 text-sm leading-6 text-muted">
-                                    <span className="text-text-primary/40 mt-2 font-display italic text-[11px] shrink-0">•</span>
+                                    <span className="font-mono text-[#89aacc] text-xs mt-1 shrink-0">▸</span>
                                     <span>{bullet}</span>
                                   </li>
                                 ))}
                               </ul>
 
-                              {/* Tech Tags */}
-                              <div className="mt-6 flex flex-wrap gap-2 pt-2">
-                                {job.skills.map((skill) => (
+                              <div className="mt-5 flex flex-wrap gap-2 pt-3 border-t border-stroke/40">
+                                {item.skills.map((skill) => (
                                   <span
                                     key={skill}
-                                    className="rounded-full border border-stroke bg-surface/50 px-3 py-1 text-[11px] text-text-primary/80 transition-colors duration-200 hover:border-text-primary hover:text-text-primary"
+                                    className="rounded-full border border-stroke bg-surface/60 px-3 py-1 text-[11px] font-mono text-text-primary/80"
                                   >
                                     {skill}
                                   </span>
@@ -207,7 +218,6 @@ export default function ResumeTimeline() {
               })}
             </div>
           </div>
-
         </div>
       </div>
     </section>
