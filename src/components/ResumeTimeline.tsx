@@ -1,223 +1,194 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { useRef } from "react";
+import { EASING, editorialFadeUp } from "../utils/motion";
+import MagneticButton from "./MagneticButton";
 
-interface Milestone {
-  role: string;
-  category: string;
+interface JourneyStep {
   period: string;
-  institutionOrContext: string;
-  description: string[];
-  skills: string[];
+  headline: string;
+  narrative: string;
+  focusAreas: string[];
 }
 
-const MILESTONES: Milestone[] = [
+const JOURNEY_STEPS: JourneyStep[] = [
   {
-    role: "B.Tech in Electronics & Communication Engineering",
-    category: "Education",
-    institutionOrContext: "Jaypee Institute of Information Technology (JIIT), Noida",
-    period: "2025 – Present",
-    description: [
-      "Studying Electronics & Communication Engineering with a focus on computer systems, software development, and cybersecurity.",
-      "Building practical foundations across digital electronics, computer networks, data structures, and hardware-software interfacing.",
-      "Applying classroom fundamentals directly to software projects, vulnerability labs, and microcontroller telemetry.",
-    ],
-    skills: ["ECE", "Digital Electronics", "Computer Networks", "C / C++", "Microcontrollers", "Data Structures"],
+    period: "2025",
+    headline: "Started engineering at JIIT Noida",
+    narrative:
+      "Began B.Tech in Electronics & Communication Engineering. Focused on foundational engineering concepts: digital circuits, computer architecture, C/C++ programming, and data structures.",
+    focusAreas: ["Electronics & Communication", "C / C++", "Computer Networks", "Digital Logic"],
   },
   {
-    role: "Cybersecurity Platforms & Interactive Labs",
-    category: "Cybersecurity",
-    institutionOrContext: "Sentinel & XSS-Guard-Lab",
     period: "2026",
-    description: [
-      "Built Sentinel, an interactive learning platform that simulates cyber attack scenarios using state machines and guided hints.",
-      "Developed XSS-Guard-Lab, an educational Stored XSS sandbox contrasting vulnerable endpoints with secure sanitization and CSP headers.",
-      "Focused on making security concepts clear and visual without exposing real infrastructure to risks.",
-    ],
-    skills: ["Web Security", "Stored XSS", "Next.js", "Python", "Flask", "OWASP", "Framer Motion"],
+    headline: "Building software and hardware projects",
+    narrative:
+      "Applied engineering fundamentals to real-world software and hardware. Built interactive cybersecurity learning tools (Sentinel, XSS Guard Lab), full-stack web applications (EdgeKart, PortFlow), and embedded IoT telemetry pipelines (Sentinel Edge).",
+    focusAreas: ["Cybersecurity Labs", "Full-Stack Development", "ESP32 & IoT", "FastAPI & Python"],
   },
   {
-    role: "Full-Stack Web Applications",
-    category: "Full-Stack",
-    institutionOrContext: "EdgeKart & PortFlow",
-    period: "2026",
-    description: [
-      "Created EdgeKart, an e-commerce platform for electronics parts and sensors with user authentication and cart management.",
-      "Built PortFlow, a customs broker onboarding platform with multi-step form workflows, document verification, and PostgreSQL schemas.",
-      "Focused on clean component architecture, reliable authentication, and REST API design.",
-    ],
-    skills: ["React", "TypeScript", "Node.js", "Express", "MongoDB", "FastAPI", "PostgreSQL", "Docker"],
-  },
-  {
-    role: "ESP32 Hardware & Cloud Telemetry",
-    category: "Embedded & IoT",
-    institutionOrContext: "Sentinel Edge",
-    period: "2026",
-    description: [
-      "Built Sentinel Edge, an end-to-end IoT monitoring pipeline connecting ESP32 environmental sensors to a live web dashboard.",
-      "Wrote microcontroller firmware for sensor polling and an asynchronous FastAPI backend for real-time data ingestion.",
-      "Designed a live dashboard with metric charts, visual gauges, and threshold alerts.",
-    ],
-    skills: ["ESP32", "Sensors", "Python", "FastAPI", "Next.js", "IoT Telemetry", "REST APIs"],
-  },
-  {
-    role: "Ongoing Projects & Exploration",
-    category: "Current Focus",
-    institutionOrContext: "Independent Exploration",
-    period: "Present",
-    description: [
-      "Continuing to explore web security, defensive coding practices, and distributed systems.",
-      "Building practical tools at the intersection of embedded microcontrollers, cybersecurity, and modern full-stack web applications.",
-    ],
-    skills: ["Web Security", "System Architecture", "Linux", "Git", "Algorithms", "Cloud Deployment"],
+    period: "Now",
+    headline: "Learning by building",
+    narrative:
+      "Deepening exploration of web security, distributed backend systems, and hardware-software interfacing. Building practical tools where software interacts with physical sensors and complex network protocols.",
+    focusAreas: ["Web Security", "System Architecture", "Hardware-to-Cloud Telemetry", "Practical Labs"],
   },
 ];
 
 export default function ResumeTimeline() {
-  const [activeMilestoneIndex, setActiveMilestoneIndex] = useState<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const stats = [
-    { number: "2025", label: "Started B.Tech", detail: "ECE @ JIIT Noida" },
-    { number: "6", label: "Projects Built", detail: "Web, Security, IoT" },
-    { number: "15+", label: "Technologies", detail: "Software & Hardware" },
-    { number: "ECE", label: "Degree Focus", detail: "Hardware + Software" },
-  ];
+  // Scroll-linked progression line
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 65%", "end 75%"],
+  });
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 24,
+    mass: 0.1,
+  });
 
   return (
-    <section id="journey" className="relative bg-bg py-20 md:py-28 border-t border-stroke overflow-hidden">
-      <div className="tech-dots absolute inset-0 opacity-20 pointer-events-none" />
+    <section id="journey" className="relative bg-bg py-24 md:py-32 border-t border-stroke/60 overflow-hidden">
+      <div className="tech-dots absolute inset-0 opacity-15 pointer-events-none" />
 
       <div className="relative z-10 mx-auto max-w-[1200px] px-6 md:px-10 lg:px-16">
-        <div className="mb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-          <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-muted mb-3">Background</p>
-            <h2 className="text-balance font-body text-4xl font-medium tracking-normal text-text-primary md:text-6xl">
-              My <span className="font-display italic">journey</span>
-            </h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-muted md:text-base">
-              A timeline of my studies at JIIT Noida, personal software projects, cybersecurity labs, and hardware builds.
-            </p>
-          </div>
-
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            download="Utkarsh_Singh_Resume.pdf"
-            className="group relative inline-flex self-start md:self-auto rounded-full p-[2px]"
-            data-cursor="link"
-            aria-label="Download Utkarsh Singh resume PDF"
+        {/* Section Header */}
+        <div className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <motion.div
+            className="max-w-2xl"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            variants={editorialFadeUp}
           >
-            <span className="animated-gradient-border absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:animate-gradient-shift group-hover:opacity-100" />
-            <span className="relative flex items-center gap-2 rounded-full border border-stroke bg-surface px-5 py-3 font-mono text-xs text-text-primary backdrop-blur-md transition group-hover:border-transparent">
-              Download résumé ↓
-            </span>
-          </a>
+            <p className="text-xs uppercase tracking-[0.2em] font-mono text-muted mb-3">
+              Background
+            </p>
+            <h2 className="text-balance font-display text-4xl italic text-text-primary sm:text-6xl md:text-7xl">
+              My journey so far.
+            </h2>
+            <p className="mt-5 text-sm leading-relaxed text-muted md:text-base">
+              A record of learning through engineering coursework at JIIT Noida, independent projects, and hands-on experiments.
+            </p>
+          </motion.div>
+
+          {/* Resume Actions with Magnetic Buttons */}
+          <div className="flex flex-wrap items-center gap-3">
+            <MagneticButton maxMovement={6}>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-full border border-stroke bg-surface px-5 py-2.5 font-mono text-xs text-text-primary transition hover:border-white/30 hover:bg-stroke"
+                aria-label="View Utkarsh Singh resume in new tab"
+              >
+                View résumé ↗
+              </a>
+            </MagneticButton>
+
+            <MagneticButton maxMovement={6}>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                download="Utkarsh_Singh_Resume.pdf"
+                className="inline-block rounded-full bg-text-primary px-5 py-2.5 font-mono text-xs font-medium text-bg transition hover:bg-white"
+                aria-label="Download Utkarsh Singh resume PDF"
+              >
+                Download résumé ↓
+              </a>
+            </MagneticButton>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Left Side: Stats */}
-          <div className="flex flex-col gap-6 lg:col-span-4 lg:sticky lg:top-28 lg:h-fit">
-            {stats.map((stat, sIdx) => (
-              <motion.div
-                key={stat.label}
-                className="rounded-2xl border border-stroke bg-surface/30 p-5 md:p-6 backdrop-blur-sm transition-colors hover:border-white/20 hover:bg-surface/50"
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: sIdx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
-                viewport={{ once: true, margin: "-60px" }}
-              >
-                <div className="flex items-baseline justify-between">
-                  <p className="font-display text-4xl italic text-text-primary md:text-5xl">{stat.number}</p>
-                  <span className="font-mono text-[10px] text-muted tracking-wider uppercase">{stat.detail}</span>
-                </div>
-                <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-muted">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Right Side: Timeline */}
-          <div className="lg:col-span-8">
-            <div className="relative border-l border-stroke/70 pl-6 md:pl-8 space-y-6">
-              {MILESTONES.map((item, idx) => {
-                const isActive = activeMilestoneIndex === idx;
-
-                return (
-                  <div key={item.role} className="relative group/item">
-                    {/* Node Dot */}
-                    <div
-                      onClick={() => setActiveMilestoneIndex(idx)}
-                      className={`absolute -left-[31px] md:-left-[39px] top-2 size-4 rounded-full border-2 transition-all duration-300 cursor-pointer ${
-                        isActive
-                          ? "bg-[#89aacc] border-[#89aacc] scale-125 shadow-[0_0_14px_rgba(137,170,204,0.6)]"
-                          : "bg-bg border-stroke hover:border-text-primary"
-                      }`}
-                    />
-
-                    {/* Milestone Card */}
-                    <div
-                      onClick={() => setActiveMilestoneIndex(idx)}
-                      className={`rounded-2xl border p-5 md:p-6 transition-all duration-300 cursor-pointer ${
-                        isActive
-                          ? "bg-surface/90 border-white/20 shadow-xl shadow-black/30"
-                          : "bg-surface/20 border-stroke/60 hover:bg-surface/40 hover:border-stroke"
-                      }`}
-                    >
-                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                        <div>
-                          <span className="font-mono text-[11px] tracking-wider text-[#89aacc] block mb-1">
-                            {item.category}
-                          </span>
-                          <h3 className="text-lg font-medium text-text-primary md:text-xl">
-                            {item.role}
-                          </h3>
-                          <p className="mt-1 text-sm text-muted">
-                            <span className="font-medium text-text-primary/90">{item.institutionOrContext}</span>
-                          </p>
-                        </div>
-                        <span className="font-mono text-xs text-muted shrink-0 md:text-right">
-                          {item.period}
-                        </span>
-                      </div>
-
-                      <AnimatePresence initial={false}>
-                        {isActive && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-                            className="overflow-hidden"
-                          >
-                            <div className="mt-5 border-t border-stroke/60 pt-4 space-y-3">
-                              <ul className="list-none space-y-2.5">
-                                {item.description.map((bullet, bIdx) => (
-                                  <li key={bIdx} className="flex items-start gap-2.5 text-sm leading-6 text-muted">
-                                    <span className="font-mono text-[#89aacc] text-xs mt-1 shrink-0">▸</span>
-                                    <span>{bullet}</span>
-                                  </li>
-                                ))}
-                              </ul>
-
-                              <div className="mt-5 flex flex-wrap gap-2 pt-3 border-t border-stroke/40">
-                                {item.skills.map((skill) => (
-                                  <span
-                                    key={skill}
-                                    className="rounded-full border border-stroke bg-surface/60 px-3 py-1 text-[11px] font-mono text-text-primary/80"
-                                  >
-                                    {skill}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </div>
-                );
-              })}
+        {/* Education Highlight Card */}
+        <motion.div
+          className="mb-16 rounded-2xl border border-stroke/70 bg-surface/30 p-6 md:p-8 backdrop-blur-sm"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={editorialFadeUp}
+        >
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stroke/60 pb-6 mb-6">
+            <div>
+              <span className="text-xs text-muted block mb-1">
+                Undergraduate Education
+              </span>
+              <h3 className="font-display text-2xl md:text-3xl italic text-text-primary">
+                B.Tech in Electronics & Communication Engineering
+              </h3>
+              <p className="mt-1 text-sm text-muted">
+                Jaypee Institute of Information Technology (JIIT), Noida
+              </p>
             </div>
+            <span className="text-xs text-text-primary/80 shrink-0 md:text-right">
+              2025 — Present
+            </span>
           </div>
+
+          <p className="text-xs md:text-sm text-muted leading-relaxed max-w-3xl">
+            Studying core ECE curriculum with focus on microcontroller architectures, communication systems, digital electronics, and computer science fundamentals. Bridging hardware concepts directly with full-stack software and cybersecurity sandboxes.
+          </p>
+        </motion.div>
+
+        {/* Scroll-Growing Narrative Progression Track */}
+        <div ref={containerRef} className="relative pl-6 md:pl-10 space-y-12">
+          {/* Static Background Rail */}
+          <div className="absolute left-[3px] md:left-[5px] top-3 bottom-3 w-[2px] bg-stroke/50" />
+
+          {/* Dynamic Scroll-Growing Active Rail */}
+          <motion.div
+            style={{ scaleY, originY: 0 }}
+            className="absolute left-[3px] md:left-[5px] top-3 bottom-3 w-[2px] bg-gradient-to-b from-[#89aacc] via-text-primary to-[#89aacc]/40"
+          />
+
+          {JOURNEY_STEPS.map((step, idx) => (
+            <motion.div
+              key={step.period}
+              className="relative group"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-40px" }}
+              variants={{
+                hidden: { opacity: 0, x: -12 },
+                visible: {
+                  opacity: 1,
+                  x: 0,
+                  transition: { duration: 0.45, ease: EASING.editorial, delay: idx * 0.08 },
+                },
+              }}
+            >
+              {/* Timeline marker node */}
+              <div className="absolute -left-[27px] md:-left-[43px] top-1.5 size-3.5 rounded-full border-2 border-stroke bg-bg transition-all duration-300 group-hover:border-[#89aacc] group-hover:bg-[#89aacc] group-hover:scale-110" />
+
+              <div className="max-w-3xl">
+                <span className="text-xs text-[#89aacc] font-medium block mb-1">
+                  {step.period}
+                </span>
+
+                <h3 className="font-body text-xl md:text-2xl font-medium text-text-primary mb-2">
+                  {step.headline}
+                </h3>
+
+                <p className="text-xs md:text-sm text-muted leading-relaxed mb-4">
+                  {step.narrative}
+                </p>
+
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {step.focusAreas.map((area) => (
+                    <span
+                      key={area}
+                      className="rounded-full border border-stroke/70 bg-surface/50 px-3 py-1 font-mono text-xs text-text-primary/80 transition-colors group-hover:border-white/20"
+                    >
+                      {area}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

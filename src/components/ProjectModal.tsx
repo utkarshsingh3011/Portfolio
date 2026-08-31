@@ -5,13 +5,12 @@ export interface ProjectDetail {
   id: string;
   title: string;
   subtitle: string;
-  badge: string;
-  badgeColor: string;
-  context: string;
+  category: string;
   year: string;
   role: string;
   overview: string;
   whatIBuilt: string;
+  whyIBuiltIt: string;
   howItWorks: string;
   keyFeatures: string[];
   engineeringFocus: string;
@@ -26,23 +25,23 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
   {
     id: "sentinel",
     title: "Sentinel",
-    subtitle: "Interactive Cybersecurity Learning Platform",
-    badge: "Cybersecurity Lab",
-    badgeColor: "border-cyan-500/30 text-cyan-300 bg-cyan-950/40",
-    context: "Security Simulation",
+    subtitle: "A hands-on way to understand how cyber attacks unfold.",
+    category: "Cybersecurity platform",
     year: "2026",
-    role: "Full-Stack & Systems",
+    role: "Frontend & simulation engine",
+    whyIBuiltIt:
+      "Security education often gets stuck between passive video lectures and dry theory. I built Sentinel to make web attack vectors visual and interactive through guided browser simulations.",
     overview:
-      "An interactive cybersecurity platform where students learn how web attacks unfold through guided investigations, visual simulations, and step-by-step learning.",
+      "Sentinel is an interactive platform where learners investigate simulated attacks instead of simply reading about them. Users step through vulnerability scenarios, inspect browser state changes, and apply mitigations in real time.",
     whatIBuilt:
-      "Engineered browser-based attack scenario simulations, interactive security investigation modules, vulnerability inspection logs, and AI-assisted contextual guidance via the Gemini API.",
+      "Engineered browser-based attack simulations using client-side finite state machines, interactive inspection checkpoints, and contextual guidance powered by the Gemini API.",
     howItWorks:
-      "Next.js and TypeScript frontend rendering interactive state machines, paired with Framer Motion simulation animations and client-side threat emulation engines.",
+      "A Next.js and TypeScript frontend renders interactive state machines, using Framer Motion for step animations and a local emulation engine to keep simulations completely safe and contained.",
     keyFeatures: [
-      "Interactive attack and defense simulations for web security scenarios.",
-      "Step-by-step guided vulnerability investigations with real-time inspection.",
-      "AI-assisted conceptual hints and explanations powered by Gemini API.",
-      "Hands-on interactive challenges with immediate remediation feedback.",
+      "Interactive attack and defense simulations for common web security scenarios.",
+      "Step-by-step vulnerability investigations with real-time state inspection.",
+      "AI-assisted conceptual hints and explanations when learners get stuck.",
+      "Hands-on challenges with immediate remediation feedback.",
     ],
     engineeringFocus:
       "Creating intuitive visual abstractions for security concepts while keeping simulations safe and client-contained.",
@@ -53,49 +52,76 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     demo: "https://sentinel-cyberlabs.vercel.app",
   },
   {
-    id: "xss-guard-lab",
-    title: "XSS-Guard-Lab",
-    subtitle: "Interactive Stored XSS Security Lab",
-    badge: "Security Lab",
-    badgeColor: "border-red-500/30 text-red-300 bg-red-950/40",
-    context: "Web Security & OWASP",
+    id: "edgekart",
+    title: "EdgeKart",
+    subtitle: "A marketplace for students and makers looking for embedded electronics.",
+    category: "Full-stack marketplace",
     year: "2026",
-    role: "Security Lab Developer",
+    role: "Full-stack development",
+    whyIBuiltIt:
+      "Students and makers often struggle to find specific microcontrollers, breakout boards, and sensors in one clean place with clear technical specs. I built EdgeKart around the needs of embedded developers.",
     overview:
-      "An educational security lab for demonstrating and understanding Stored Cross-Site Scripting (XSS) vulnerabilities in a controlled environment.",
+      "EdgeKart is an e-commerce platform designed around embedded electronics, microcontrollers, and sensor modules for students, hobbyists, and engineers.",
     whatIBuilt:
-      "Developed a dual-environment Flask lab contrasting vulnerable execution sinks with secure remediation layers to illustrate payload persistence and defensive mitigation.",
+      "Built an end-to-end shopping experience featuring product catalog filtering, cart state management, user wishlists, JWT authentication, and an admin inventory management dashboard.",
     howItWorks:
-      "Python Flask web server with distinct route architectures: unescaped database sinks for attack demonstration alongside context-aware HTML entity encoding and Content Security Policy (CSP) enforcement.",
+      "A React and TypeScript frontend communicates via REST APIs with an Express.js backend and a MongoDB document database modeled with Mongoose schemas.",
     keyFeatures: [
-      "Interactive Stored XSS payload persistence and script execution lab.",
-      "Side-by-side vulnerable vs. remediated code execution analysis.",
-      "Defensive implementation: HTML sanitization, output encoding, and CSP headers.",
-      "Educational guide explaining OWASP Top 10 web security concepts.",
+      "Electronics catalog with category filtering and instant search.",
+      "User authentication with JWT session management and password hashing.",
+      "Persistent shopping cart and order checkout workflow.",
+      "Admin dashboard for adding and updating hardware parts.",
     ],
     engineeringFocus:
-      "Isolating vulnerable demonstration code safely while clearly articulating the mechanics of output encoding and browser execution contexts.",
-    tech: ["Python", "Flask", "HTML5", "CSS3", "JavaScript", "Web Security", "OWASP"],
+      "Managing shopping cart and wishlist state synchronization while optimizing MongoDB compound query indexing for multi-attribute component searches.",
+    tech: ["React", "TypeScript", "Node.js", "Express", "MongoDB", "Tailwind CSS", "JWT Auth"],
     image:
-      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1400&q=85",
-    github: "https://github.com/utkarshsingh3011/xss-guard-lab",
-    demo: "https://xss-guard-lab.vercel.app",
-    disclaimer:
-      "Educational Notice: This is an intentionally vulnerable educational lab designed strictly for learning web security concepts and defensive output encoding. It is not a production security tool.",
+      "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=1400&q=85",
+    github: "https://github.com/utkarshsingh3011/EdgeKart",
+    demo: "https://edgekart.vercel.app",
+  },
+  {
+    id: "safesteps",
+    title: "SafeSteps",
+    subtitle: "An educational guide and safety platform for practical digital hygiene.",
+    category: "Safety & education",
+    year: "2026",
+    role: "Frontend & integration",
+    whyIBuiltIt:
+      "Digital security can feel overwhelming for everyday non-technical users. SafeSteps simplifies practical cyber hygiene into bite-sized, interactive visual lessons paired with emergency assistance tools.",
+    overview:
+      "SafeSteps is an interactive digital safety platform focused on practical privacy tips, account security lessons, and one-tap emergency contact workflows for everyday internet users.",
+    whatIBuilt:
+      "Designed and developed interactive digital safety tutorials, emergency SOS contact workflows, geolocation route assistance, and responsive mobile layouts.",
+    howItWorks:
+      "A Next.js and TypeScript web app integrated with Firebase Authentication and Realtime Database, paired with Google Maps API for route assistance.",
+    keyFeatures: [
+      "Interactive digital safety lessons with real-world security guidance.",
+      "One-tap emergency SOS interface with location coordinate sharing.",
+      "Trusted contacts management and safety assistance map navigation.",
+      "Accessibility-focused mobile design optimized for straightforward navigation.",
+    ],
+    engineeringFocus:
+      "Balancing high responsiveness and location reporting with a calm, accessible user interface suitable for educational contexts.",
+    tech: ["Next.js", "TypeScript", "React", "Tailwind CSS", "Firebase", "Google Maps API"],
+    image:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=85",
+    github: "https://github.com/utkarshsingh3011/SafeSteps-Platform",
+    demo: "https://safesteps-platform.vercel.app",
   },
   {
     id: "sentinel-edge",
     title: "Sentinel Edge",
-    subtitle: "ESP32 IoT Monitoring System",
-    badge: "Embedded & IoT",
-    badgeColor: "border-emerald-500/30 text-emerald-300 bg-emerald-950/40",
-    context: "Hardware-to-Cloud Telemetry",
+    subtitle: "Live environmental sensor data from an ESP32 to a web dashboard.",
+    category: "Hardware & IoT",
     year: "2026",
-    role: "Hardware & Backend",
+    role: "Firmware & telemetry backend",
+    whyIBuiltIt:
+      "Moving sensor readings from physical microcontrollers to web interfaces without dropped packets or memory overflows requires thoughtful hardware polling, batching, and lightweight async ingestion.",
     overview:
-      "A full-stack IoT monitoring system that collects live environmental sensor data from ESP32 hardware, transmits it through a FastAPI backend, and visualizes it on a web dashboard.",
+      "Sentinel Edge is an IoT telemetry pipeline that reads live environmental sensor data from ESP32 microcontrollers, streams it through an asynchronous FastAPI backend, and renders real-time metric visualizations.",
     whatIBuilt:
-      "Developed ESP32 C++ firmware for environmental sensor polling, an asynchronous FastAPI telemetry ingestion backend, and a real-time Next.js dashboard.",
+      "Developed ESP32 C++ firmware for sensor polling, an asynchronous FastAPI ingestion backend in Python, and a real-time Next.js dashboard.",
     howItWorks:
       "Sensors → ESP32 Microcontroller → WiFi / HTTP Telemetry → FastAPI Python Server → Real-time Next.js Dashboard.",
     keyFeatures: [
@@ -106,55 +132,26 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     ],
     engineeringFocus:
       "Optimizing memory efficiency on ESP32 microcontrollers while maintaining reliable, low-latency telemetry transmission to the web dashboard.",
-    tech: ["ESP32", "Python", "FastAPI", "Next.js", "TypeScript", "IoT", "Sensors", "REST APIs"],
+    tech: ["ESP32", "Python", "FastAPI", "Next.js", "TypeScript", "Sensors", "REST APIs"],
     image:
       "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1400&q=85",
-    github: "https://github.com/utkarsingh3011/sentinel-edge",
-  },
-  {
-    id: "edgekart",
-    title: "EdgeKart",
-    subtitle: "Embedded Systems Marketplace",
-    badge: "Full-Stack MERN",
-    badgeColor: "border-purple-500/30 text-purple-300 bg-purple-950/40",
-    context: "Web Application",
-    year: "2026",
-    role: "Full-Stack Developer",
-    overview:
-      "A full-stack marketplace designed around embedded electronics components for students, makers, and engineers.",
-    whatIBuilt:
-      "Engineered an end-to-end e-commerce platform with product browsing, shopping cart state management, user wishlist, JWT-based authentication, and admin inventory controls.",
-    howItWorks:
-      "React and TypeScript frontend communicating via REST APIs with an Express.js backend and MongoDB document database modeled with Mongoose schemas.",
-    keyFeatures: [
-      "Electronics component catalog with category filtering and instant search.",
-      "Secure user authentication with JWT session management and password hashing.",
-      "Persistent shopping cart and order checkout workflow.",
-      "Admin inventory management dashboard for adding and updating hardware components.",
-    ],
-    engineeringFocus:
-      "Managing shopping cart and wishlist state synchronization while optimizing MongoDB query performance for dynamic catalog search.",
-    tech: ["React", "TypeScript", "Node.js", "Express", "MongoDB", "Authentication", "Tailwind CSS"],
-    image:
-      "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=1400&q=85",
-    github: "https://github.com/utkarshsingh3011/EdgeKart",
-    demo: "https://edgekart.vercel.app",
+    github: "https://github.com/utkarshsingh3011/sentinel-edge",
   },
   {
     id: "portflow",
     title: "PortFlow",
-    subtitle: "Customs Broker Onboarding Platform",
-    badge: "Workflow Architecture",
-    badgeColor: "border-blue-500/30 text-blue-300 bg-blue-950/40",
-    context: "Enterprise Build",
+    subtitle: "A digital workflow for customs broker onboarding and compliance.",
+    category: "Full-stack workflow",
     year: "2026",
-    role: "Full-Stack Developer",
+    role: "Full-stack development",
+    whyIBuiltIt:
+      "Customs broker and importer onboarding involves numerous regulatory checkpoints, document validations, and compliance records that standard web forms cannot accommodate.",
     overview:
-      "A production-inspired workflow platform designed around importer onboarding, document verification, compliance tracking, audit logging, and reporting.",
+      "PortFlow explores how customs onboarding can be streamlined digitally — from customer details and document verification to compliance checklists and audit logging.",
     whatIBuilt:
       "Built a multi-stage onboarding workflow engine with rigorous form validation, document tracking checklists, PostgreSQL relational data models, and containerized Docker services.",
     howItWorks:
-      "Dockerized setup with a React and TypeScript frontend communicating with an async FastAPI backend and PostgreSQL database.",
+      "A Dockerized setup with a React and TypeScript frontend communicating with an asynchronous FastAPI backend and PostgreSQL database.",
     keyFeatures: [
       "Multi-stage customer onboarding form wizard with granular field validation.",
       "Document upload tracking and compliance verification checklists.",
@@ -169,33 +166,35 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     github: "https://github.com/utkarshsingh3011/PortFlow",
   },
   {
-    id: "safesteps",
-    title: "SafeSteps",
-    subtitle: "Digital Safety Education Platform",
-    badge: "Safety Education",
-    badgeColor: "border-amber-500/30 text-amber-300 bg-amber-950/40",
-    context: "Educational Web App",
+    id: "xss-guard-lab",
+    title: "XSS Guard Lab",
+    subtitle: "An educational sandbox for testing XSS vulnerabilities and defensive fixes.",
+    category: "Security lab",
     year: "2026",
-    role: "Full-Stack Developer",
+    role: "Security lab developer",
+    whyIBuiltIt:
+      "Understanding web injection vulnerabilities is easiest when you can see what happens inside the browser execution sink when input is unencoded versus when sanitization and CSP headers are applied.",
     overview:
-      "An educational platform designed to help beginners develop practical digital safety skills through guided lessons, activities, and real-world examples.",
+      "XSS Guard Lab is an educational lab demonstrating Stored Cross-Site Scripting (XSS) mechanics and defensive remediation in a sandboxed Flask environment.",
     whatIBuilt:
-      "Designed and developed interactive digital safety tutorials, emergency SOS contact workflows, geolocation route assistance, and accessible mobile layouts.",
+      "Developed a dual-route Flask lab contrasting vulnerable execution sinks with secure remediation layers to illustrate payload persistence and defensive mitigation.",
     howItWorks:
-      "React and TypeScript web application integrated with Firebase Authentication and Realtime Database, coupled with Google Maps API for route mapping.",
+      "A Python Flask server with distinct routes: unescaped database sinks for attack demonstration alongside context-aware HTML entity encoding and Content Security Policy (CSP) enforcement.",
     keyFeatures: [
-      "Interactive digital safety lessons with real-world security guidance.",
-      "One-tap emergency SOS interface with location coordinate sharing.",
-      "Trusted contacts management and safety assistance map navigation.",
-      "Accessibility-focused mobile design optimized for straightforward navigation.",
+      "Interactive Stored XSS payload persistence and script execution lab.",
+      "Side-by-side vulnerable vs. remediated code execution analysis.",
+      "Defensive implementation: HTML sanitization, output encoding, and CSP headers.",
+      "Educational guide explaining OWASP web security concepts.",
     ],
     engineeringFocus:
-      "Balancing high responsiveness and location reporting with a calm, accessible user interface suitable for educational contexts.",
-    tech: ["React", "TypeScript", "Tailwind CSS", "Firebase", "Google Maps", "Interactive UI"],
+      "Isolating vulnerable demonstration code safely while clearly articulating the mechanics of output encoding and browser execution contexts.",
+    tech: ["Python", "Flask", "HTML", "CSS", "JavaScript", "Web Security", "OWASP"],
     image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=85",
-    github: "https://github.com/utkarshsingh3011/SafeSteps-Platform",
-    demo: "https://safesteps-platform.vercel.app",
+      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1400&q=85",
+    github: "https://github.com/utkarshsingh3011/xss-guard-lab",
+    demo: "https://xss-guard-lab.vercel.app",
+    disclaimer:
+      "Educational note: This is an intentionally vulnerable educational lab designed strictly for learning web security concepts and defensive output encoding.",
   },
 ];
 
@@ -247,8 +246,11 @@ export default function ProjectModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[9990] flex h-screen w-screen overflow-hidden bg-bg/90 backdrop-blur-2xl"
+          className="fixed inset-0 z-[9990] flex h-screen w-screen overflow-hidden bg-bg/95 backdrop-blur-2xl"
           onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-label={project.title}
         >
           {/* Scrollable Container */}
           <div
@@ -256,12 +258,14 @@ export default function ProjectModal({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Bar */}
-            <div className="sticky top-0 z-[9995] flex items-center justify-between border-b border-stroke/60 bg-bg/85 px-6 py-4 backdrop-blur-md md:px-12">
+            <div className="sticky top-0 z-[9995] flex items-center justify-between border-b border-stroke/70 bg-bg/90 px-6 py-4 backdrop-blur-md md:px-12">
               <div className="flex items-center gap-3">
-                <span
-                  className={`rounded-full border px-3 py-0.5 text-xs font-mono ${project.badgeColor}`}
-                >
-                  {project.badge}
+                <span className="text-xs text-muted">
+                  {project.category}
+                </span>
+                <span className="text-stroke">•</span>
+                <span className="text-xs text-text-primary">
+                  {project.year}
                 </span>
               </div>
 
@@ -297,7 +301,6 @@ export default function ProjectModal({
                 <button
                   onClick={onClose}
                   className="ml-2 flex items-center gap-1.5 rounded-full border border-stroke bg-surface px-4 py-1.5 font-mono text-xs text-text-primary transition hover:border-white/40 hover:bg-stroke"
-                  data-cursor="close"
                   aria-label="Close project modal"
                 >
                   <span>Close</span>
@@ -307,7 +310,7 @@ export default function ProjectModal({
             </div>
 
             {/* Core Content Layout */}
-            <div className="mx-auto max-w-[1000px] px-6 pb-20 pt-8 md:px-12 md:pb-28 md:pt-12">
+            <div className="mx-auto max-w-[850px] px-6 pb-20 pt-8 md:px-12 md:pb-28 md:pt-12">
               {/* Title & Subtitle */}
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -315,13 +318,20 @@ export default function ProjectModal({
                 transition={{ delay: 0.05, duration: 0.4 }}
                 className="max-w-3xl"
               >
-                <span className="text-xs font-mono text-muted block mb-2">
-                  {project.context} • {project.year}
-                </span>
-                <h1 className="font-display text-5xl italic leading-tight text-text-primary md:text-7xl">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs text-muted">
+                    {project.category}
+                  </span>
+                  <span className="text-stroke">•</span>
+                  <span className="text-xs text-muted">
+                    {project.year}
+                  </span>
+                </div>
+
+                <h1 className="font-display text-4xl italic text-text-primary sm:text-6xl md:text-7xl">
                   {project.title}
                 </h1>
-                <p className="mt-3 text-lg text-muted md:text-xl leading-relaxed">
+                <p className="mt-4 text-base text-muted md:text-xl leading-relaxed">
                   {project.subtitle}
                 </p>
               </motion.div>
@@ -331,26 +341,16 @@ export default function ProjectModal({
                 initial={{ y: 15, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.1, duration: 0.35 }}
-                className="mt-8 flex flex-wrap items-center justify-between gap-6 border-y border-stroke py-6"
+                className="mt-8 flex flex-wrap items-center justify-between gap-6 border-y border-stroke/70 py-6"
               >
-                <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
+                <div className="flex flex-wrap gap-8 text-xs">
                   <div>
-                    <span className="text-xs font-mono text-muted block">Category</span>
-                    <span className="mt-1 block text-sm font-medium text-text-primary">
-                      {project.context}
-                    </span>
+                    <span className="text-muted block mb-1">Focus</span>
+                    <span className="text-text-primary font-medium">{project.role}</span>
                   </div>
                   <div>
-                    <span className="text-xs font-mono text-muted block">Year</span>
-                    <span className="mt-1 block text-sm font-medium text-text-primary">
-                      {project.year}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-xs font-mono text-muted block">Focus</span>
-                    <span className="mt-1 block text-sm font-medium text-text-primary">
-                      {project.role}
-                    </span>
+                    <span className="text-muted block mb-1">Year</span>
+                    <span className="text-text-primary font-medium">{project.year}</span>
                   </div>
                 </div>
 
@@ -380,9 +380,8 @@ export default function ProjectModal({
 
               {/* Disclaimer if present */}
               {project.disclaimer && (
-                <div className="mt-6 rounded-2xl border border-red-500/30 bg-red-950/20 p-4 text-xs font-mono text-red-300 flex items-start gap-2">
-                  <span className="text-sm shrink-0">ℹ️</span>
-                  <span>{project.disclaimer}</span>
+                <div className="mt-6 rounded-2xl border border-amber-500/20 bg-amber-950/20 p-4 text-xs text-amber-200/90 leading-relaxed">
+                  {project.disclaimer}
                 </div>
               )}
 
@@ -391,83 +390,72 @@ export default function ProjectModal({
                 initial={{ scale: 0.98, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.15, duration: 0.5 }}
-                className="group relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-3xl border border-stroke bg-surface"
+                className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-2xl border border-stroke bg-surface"
               >
                 <img
                   src={project.image}
                   alt={project.title}
                   className="h-full w-full object-cover"
                 />
-                <div className="halftone absolute inset-0 opacity-20 mix-blend-multiply pointer-events-none" />
               </motion.div>
 
-              {/* Case Study Details Grid */}
-              <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14">
-                {/* Left Side: Tech Stack */}
-                <div className="lg:col-span-4 space-y-6">
-                  <div>
-                    <h3 className="text-xs uppercase tracking-wider font-mono text-text-primary mb-3">
-                      Tech Stack
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tech.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-full border border-stroke bg-surface/70 px-3 py-1 text-xs font-mono text-text-primary/95"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+              {/* Case Study Details */}
+              <div className="mt-12 space-y-12 text-sm leading-relaxed text-muted md:text-base">
+                {/* Why I built it */}
+                <div>
+                  <h2 className="text-xs uppercase tracking-wider text-text-primary mb-3">
+                    Why I built it
+                  </h2>
+                  <p className="leading-7 text-text-primary/90">{project.whyIBuiltIt}</p>
+                </div>
 
-                  <div className="rounded-2xl border border-stroke bg-surface/30 p-5">
-                    <h4 className="text-xs uppercase tracking-wider font-mono text-muted mb-2">
-                      Engineering Focus
-                    </h4>
-                    <p className="text-xs leading-relaxed text-muted">
-                      {project.engineeringFocus}
-                    </p>
+                {/* What I built */}
+                <div>
+                  <h2 className="text-xs uppercase tracking-wider text-text-primary mb-3">
+                    What I built
+                  </h2>
+                  <p className="leading-7">{project.whatIBuilt}</p>
+                </div>
+
+                {/* Architecture & Flow */}
+                <div>
+                  <h2 className="text-xs uppercase tracking-wider text-text-primary mb-3">
+                    How it works under the hood
+                  </h2>
+                  <div className="rounded-xl border border-stroke bg-surface/50 p-4 font-mono text-xs text-text-primary/90 leading-6">
+                    {project.howItWorks}
                   </div>
                 </div>
 
-                {/* Right Side: Structured Details */}
-                <div className="space-y-8 lg:col-span-8 text-sm md:text-base leading-relaxed text-muted">
-                  <div>
-                    <h3 className="text-xs uppercase tracking-wider font-mono text-text-primary mb-2">
-                      Overview
-                    </h3>
-                    <p className="leading-7">{project.overview}</p>
-                  </div>
+                {/* Key Features */}
+                <div>
+                  <h2 className="text-xs uppercase tracking-wider text-text-primary mb-3">
+                    Key features
+                  </h2>
+                  <ul className="space-y-2.5">
+                    {project.keyFeatures.map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-2.5 text-sm leading-6">
+                        <span className="text-muted mt-0.5 shrink-0">—</span>
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-                  <div>
-                    <h3 className="text-xs uppercase tracking-wider font-mono text-text-primary mb-2">
-                      What I Built
-                    </h3>
-                    <p className="leading-7">{project.whatIBuilt}</p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-xs uppercase tracking-wider font-mono text-text-primary mb-2">
-                      Architecture & Data Flow
-                    </h3>
-                    <div className="rounded-2xl border border-stroke bg-surface/40 p-4 font-mono text-xs text-text-primary/90 leading-6">
-                      {project.howItWorks}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-xs uppercase tracking-wider font-mono text-text-primary mb-2">
-                      Key Features
-                    </h3>
-                    <ul className="space-y-2.5">
-                      {project.keyFeatures.map((feat, fIdx) => (
-                        <li key={fIdx} className="flex items-start gap-2.5 text-sm leading-6">
-                          <span className="font-mono text-[#89aacc] mt-0.5 shrink-0">▸</span>
-                          <span>{feat}</span>
-                        </li>
-                      ))}
-                    </ul>
+                {/* Technologies */}
+                <div>
+                  <h2 className="text-xs uppercase tracking-wider text-text-primary mb-3">
+                    Technologies
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tech.map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-full border border-stroke bg-surface/60 px-3.5 py-1 text-xs font-mono text-text-primary/90"
+                      >
+                        {t}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>

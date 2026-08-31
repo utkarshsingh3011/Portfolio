@@ -1,104 +1,153 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { EASING, editorialFadeUp } from "../utils/motion";
 
-interface SkillCategory {
-  title: string;
+interface StackCategory {
+  id: string;
+  name: string;
+  role: string;
   description: string;
-  skills: string[];
+  technologies: string[];
 }
 
-const SKILL_CATEGORIES: SkillCategory[] = [
+const STACK_LAYERS: StackCategory[] = [
   {
-    title: "Programming Languages",
-    description: "Languages I use for backend logic, web interfaces, algorithms, and microcontrollers.",
-    skills: ["Python", "TypeScript", "JavaScript", "C / C++", "SQL"],
+    id: "frontend",
+    name: "Frontend & Interfaces",
+    role: "User experience & browser state",
+    description:
+      "Crafting performant interfaces, interactive state lifecycles, and responsive layouts.",
+    technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML5 / CSS3"],
   },
   {
-    title: "Frontend Development",
-    description: "Building responsive, accessible web interfaces and interactive visual simulations.",
-    skills: ["React", "Next.js", "Tailwind CSS", "HTML5 & CSS3", "Framer Motion"],
+    id: "backend",
+    name: "Backend & APIs",
+    role: "Services & data endpoints",
+    description:
+      "Building asynchronous ingestion services, REST APIs, and authentication flows.",
+    technologies: ["Python", "FastAPI", "Node.js", "Express", "REST APIs"],
   },
   {
-    title: "Backend & APIs",
-    description: "Creating asynchronous services, REST endpoints, and secure authentication flows.",
-    skills: ["FastAPI", "Flask", "Node.js", "Express", "REST APIs", "JWT"],
+    id: "security",
+    name: "Web Security",
+    role: "Vulnerability analysis & defenses",
+    description:
+      "Studying attack vectors, input sanitization, output encoding, and defensive headers in sandboxed environments.",
+    technologies: ["Web security", "Stored XSS", "OWASP concepts", "Input sanitization", "JWT auth"],
   },
   {
-    title: "Databases",
-    description: "Designing relational schemas and managing document-based data storage.",
-    skills: ["PostgreSQL", "MongoDB", "SQL Schemas", "Mongoose ORM"],
+    id: "hardware",
+    name: "Hardware & Embedded",
+    role: "Microcontrollers & telemetry",
+    description:
+      "Programming microcontrollers, polling sensor hardware, and transmitting live telemetry over WiFi.",
+    technologies: ["Arduino Uno", "ESP32", "C / C++", "Sensors", "Hardware telemetry"],
   },
   {
-    title: "Cybersecurity Labs",
-    description: "Hands-on vulnerability labs, attack mechanics, and practical defensive remediation.",
-    skills: ["Web Security", "Stored XSS", "Security Education", "Vulnerability Labs", "OWASP"],
+    id: "data",
+    name: "Databases",
+    role: "Storage & data models",
+    description:
+      "Structuring relational database schemas with integrity constraints alongside document stores.",
+    technologies: ["PostgreSQL", "MongoDB", "SQL", "Mongoose ORM"],
   },
   {
-    title: "Embedded Systems & IoT",
-    description: "Microcontroller programming, sensor telemetry, and hardware-to-cloud integration.",
-    skills: ["ESP32", "Sensor Interfacing", "Embedded Systems", "IoT Telemetry"],
-  },
-  {
-    title: "Tools & Workflow",
-    description: "Version control, containerization, local development, and deployment platforms.",
-    skills: ["Git & GitHub", "Docker", "Vercel", "Linux / Bash", "Postman"],
+    id: "tools",
+    name: "Tools & Workflow",
+    role: "Development environment",
+    description:
+      "Containerized environments, Linux system administration, and version control workflows.",
+    technologies: ["Git", "GitHub", "Docker", "Linux / Bash", "Postman", "Vercel"],
   },
 ];
 
 export default function EngineeringStack() {
+  const [activeLayer, setActiveLayer] = useState<string | null>(null);
+
   return (
-    <section id="stack" className="relative bg-bg py-20 md:py-28 border-t border-stroke overflow-hidden">
-      <div className="tech-grid absolute inset-0 opacity-30 pointer-events-none" />
+    <section id="stack" className="relative bg-bg py-24 md:py-32 border-t border-stroke/60 overflow-hidden">
+      <div className="tech-grid absolute inset-0 opacity-20 pointer-events-none" />
 
       <div className="relative z-10 mx-auto max-w-[1200px] px-6 md:px-10 lg:px-16">
+        {/* Section Header */}
         <motion.div
-          className="mb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+          className="mb-16 max-w-3xl"
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
+          variants={editorialFadeUp}
         >
-          <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-muted mb-3">Toolbox</p>
-            <h2 className="text-balance font-body text-4xl font-medium tracking-normal text-text-primary md:text-6xl">
-              What I <span className="font-display italic">work with</span>
-            </h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-muted md:text-base">
-              Languages, frameworks, databases, and hardware tools I use to build complete applications and systems.
-            </p>
-          </div>
+          <p className="text-xs uppercase tracking-[0.2em] font-mono text-muted mb-3">
+            Skills & tools
+          </p>
+          <h2 className="text-balance font-display text-4xl italic text-text-primary sm:text-6xl md:text-7xl">
+            What I work with.
+          </h2>
+          <p className="mt-5 text-sm leading-relaxed text-muted md:text-base max-w-2xl">
+            The languages, frameworks, and hardware tools I use to turn ideas into working software and connected devices.
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {SKILL_CATEGORIES.map((cat, idx) => (
-            <motion.div
-              key={cat.title}
-              className={`group relative overflow-hidden rounded-3xl border border-stroke bg-surface/40 p-6 md:p-7 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-surface/70 hover:shadow-xl hover:shadow-black/30 ${
-                idx === 6 ? "md:col-span-2 lg:col-span-3" : ""
-              }`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.05, ease: [0.25, 0.1, 0.25, 1] }}
-              viewport={{ once: true, margin: "-50px" }}
-            >
-              <h3 className="font-body text-xl font-medium text-text-primary md:text-2xl mb-2">
-                {cat.title}
-              </h3>
-              <p className="text-xs text-muted leading-relaxed mb-6">
-                {cat.description}
-              </p>
+        {/* Detailed Layers Grid */}
+        <div className="space-y-4">
+          {STACK_LAYERS.map((layer, idx) => {
+            const isHovered = activeLayer === layer.id;
 
-              <div className="flex flex-wrap gap-2 pt-4 border-t border-stroke/50">
-                {cat.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="rounded-full border border-stroke bg-surface/60 px-3 py-1.5 text-xs text-text-primary/90 transition-colors duration-200 group-hover:border-white/15 hover:border-[#89aacc]/50 hover:text-white"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+            return (
+              <motion.div
+                key={layer.id}
+                onMouseEnter={() => setActiveLayer(layer.id)}
+                onMouseLeave={() => setActiveLayer(null)}
+                className={`group relative rounded-2xl border transition-all duration-300 p-6 md:p-8 ${
+                  isHovered
+                    ? "border-white/25 bg-surface/80 shadow-xl shadow-black/40"
+                    : "border-stroke/60 bg-surface/25 hover:border-stroke hover:bg-surface/40"
+                }`}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-40px" }}
+                variants={{
+                  hidden: { opacity: 0, y: 14 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.4, ease: EASING.editorial, delay: idx * 0.05 },
+                  },
+                }}
+              >
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                  {/* Category Title & Role */}
+                  <div className="md:col-span-4">
+                    <h3 className="font-body text-xl font-medium text-text-primary md:text-2xl transition-transform duration-300 group-hover:translate-x-1">
+                      {layer.name}
+                    </h3>
+                    <span className="text-xs text-muted block mt-1">
+                      {layer.role}
+                    </span>
+                  </div>
+
+                  {/* Description */}
+                  <div className="md:col-span-4">
+                    <p className="text-xs md:text-sm text-muted leading-relaxed">
+                      {layer.description}
+                    </p>
+                  </div>
+
+                  {/* Technologies */}
+                  <div className="md:col-span-4 flex flex-wrap gap-1.5 md:justify-end">
+                    {layer.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-full border border-stroke/70 bg-bg/80 px-3 py-1 text-xs font-mono text-text-primary/90 transition-colors group-hover:border-white/20"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

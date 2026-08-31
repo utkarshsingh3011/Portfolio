@@ -5,7 +5,15 @@ export default defineConfig({
   plugins: [react()],
   server: {
     watch: {
-      ignored: ["**/.edge-profile*/**", "**/.chrome-profile*/**", "**/dist/**"],
+      ignored: [
+        "**/.edge-profile*/**",
+        "**/.chrome-profile*/**",
+        "**/dist/**",
+        "**/*.tmp",
+        "**/~*",
+        "**/*.docx",
+        "**/*.pdf",
+      ],
     },
   },
 });

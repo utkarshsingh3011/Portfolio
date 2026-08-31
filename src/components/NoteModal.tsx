@@ -20,60 +20,84 @@ export interface EngineeringNote {
 export const ENGINEERING_NOTES: EngineeringNote[] = [
   {
     id: "sentinel-note",
-    title: "Designing Sentinel: Simulating Attack Vectors & Interactive Web Security in Next.js",
-    category: "Cybersecurity & Web",
-    date: "Jul 2026",
-    read: "5 min read",
+    title: "Building Sentinel: An interactive way to explore web security",
+    category: "Web security",
+    date: "2026",
+    read: "4 min read",
     snippet:
-      "Exploring how to build sandboxed visual attack simulations without exposing server infrastructure, using client state machines and AI hints.",
+      "Designing browser-contained attack simulations without exposing real backend servers, using client state machines and AI-guided hints.",
     image:
       "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=85",
     content: {
       problemStatement:
-        "Traditional web security education often relies on complex virtual machine setups or dry theory. The goal for Sentinel was to create an immediate, browser-first sandbox where students can visualize how malicious payloads propagate across client-server boundaries in real time.",
+        "Traditional web security education often relies on heavy virtual machines or dry theory. I wanted to build an immediate, browser-first sandbox where students can visualize how attack payloads propagate across client-server boundaries step-by-step.",
       architectureOverview:
-        "Sentinel models attack scenarios as finite state machines rendered via Next.js and Framer Motion. Rather than executing hazardous payloads against live backend endpoints, the client executes simulated threat steps, tracking inspection states and verifying mitigation checkpoints locally. Contextual hints are streamed via the Gemini API when users encounter road blocks.",
+        "Sentinel models attack scenarios as deterministic finite state machines rendered via Next.js and Framer Motion. Instead of executing hazardous code on a live backend, the client executes simulated threat transitions, tracking inspection states and verifying mitigation checkpoints locally. Contextual hints are streamed via the Gemini API when users need conceptual guidance.",
       keyTakeaways: [
         "State machine architecture allows complex multi-stage attack simulations to remain safe, predictable, and fully client-contained.",
         "Visual animations help beginners grasp abstract concepts like DOM manipulation, token theft, and reflected payload paths.",
-        "Integrating LLM APIs for interactive hints significantly lowers the barrier to entry for self-directed learning.",
+        "Integrating LLM APIs for interactive hints significantly lowers the barrier to entry for self-directed learning without spoiling solutions.",
       ],
       technicalSnippet:
-        "// Attack Step State Machine\ntype SimulationState = 'IDLE' | 'PAYLOAD_INJECTED' | 'DOM_RENDERED' | 'TOKEN_EXFILTRATED' | 'MITIGATED';\n\ninterface StepResult {\n  state: SimulationState;\n  isSafe: boolean;\n  vulnerabilityTriggered: boolean;\n  remediationGuide: string;\n}",
+        "// Attack Step Finite State Machine\ntype SimulationState = 'IDLE' | 'PAYLOAD_INJECTED' | 'DOM_RENDERED' | 'TOKEN_EXFILTRATED' | 'MITIGATED';\n\ninterface StepResult {\n  state: SimulationState;\n  isSafe: boolean;\n  vulnerabilityTriggered: boolean;\n  remediationGuide: string;\n}",
     },
   },
   {
     id: "esp32-note",
-    title: "Hardware to Cloud: ESP32 Sensor Telemetry Streaming to FastAPI & Next.js",
-    category: "Embedded & IoT",
-    date: "Jun 2026",
+    title: "Connecting ESP32 sensors to a live web dashboard",
+    category: "Hardware & IoT",
+    date: "2026",
     read: "4 min read",
     snippet:
-      "Architecting a continuous environmental telemetry pipeline from ESP32 C++ firmware to an asynchronous FastAPI backend and real-time dashboard.",
+      "Moving environmental sensor data from physical microcontrollers to an asynchronous Python backend and real-time frontend charts.",
     image:
       "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=85",
     content: {
       problemStatement:
-        "Connecting physical hardware sensors to web interfaces requires handling microcontroller memory constraints, connection drops, and high-frequency JSON payload ingestion without bottlenecking backend databases.",
+        "Connecting physical hardware sensors to web interfaces requires managing microcontroller memory constraints, WiFi reconnect drops, and high-frequency JSON payload ingestion without bottlenecking backend databases.",
       architectureOverview:
-        "The ESP32 reads analog and digital sensor streams, aggregates metrics over fixed sample windows, and dispatches authenticated HTTP POST requests over WiFi. The backend is an asynchronous FastAPI service that validates incoming payloads, computes moving averages, and serves live telemetry to a Next.js visualization frontend.",
+        "The ESP32 reads analog and digital sensor streams, batches samples into fixed ring buffers, and dispatches authenticated HTTP POST requests over WiFi. The backend is an asynchronous FastAPI service that validates incoming payloads, computes moving averages, and serves live telemetry to a Next.js visualization frontend.",
       keyTakeaways: [
-        "Batching sensor metrics on the microcontroller drastically reduces WiFi transmit overhead and power consumption.",
+        "Batching sensor metrics on the microcontroller drastically reduces WiFi transmit overhead, memory fragmentation, and power consumption.",
         "Asynchronous Python backends (FastAPI / Uvicorn) easily sustain concurrent microcontroller streaming with sub-50ms ingestion latency.",
-        "Client dashboards require throttling re-renders with requestAnimationFrame to maintain 60 FPS when graphing live data streams.",
+        "Client dashboards require throttling re-renders with requestAnimationFrame or fixed interval polling to maintain 60 FPS when graphing live data streams.",
       ],
       technicalSnippet:
-        "// ESP32 Telemetry Dispatch Pattern\nStaticJsonDocument<256> payload;\npayload[\"device_id\"] = \"ESP32_NODE_01\";\npayload[\"temp_c\"] = readTemperature();\npayload[\"humidity\"] = readHumidity();\npayload[\"timestamp\"] = getEpochTime();\n\nhttp.POST(serializeJson(payload));",
+        "// ESP32 Telemetry Batch Dispatch Pattern\nStaticJsonDocument<256> payload;\npayload[\"device_id\"] = \"ESP32_NODE_01\";\npayload[\"temp_c\"] = readTemperature();\npayload[\"humidity\"] = readHumidity();\npayload[\"timestamp\"] = getEpochTime();\n\nhttp.POST(serializeJson(payload));",
+    },
+  },
+  {
+    id: "mern-note",
+    title: "Handling cart state and search indexing in a MERN app",
+    category: "Full-stack web",
+    date: "2026",
+    read: "5 min read",
+    snippet:
+      "Structuring optimistic client state updates, JWT authorization lifecycles, and indexed MongoDB document stores in EdgeKart.",
+    image:
+      "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=1200&q=85",
+    content: {
+      problemStatement:
+        "E-commerce platforms for hardware and electronic parts require handling granular product specifications (operating voltages, pin configurations, protocols) while maintaining smooth shopping cart synchronization across devices.",
+      architectureOverview:
+        "Built with React and TypeScript on the frontend communicating with an Express.js REST API. User sessions are secured using JSON Web Tokens (JWT). Product data is stored in MongoDB with indexed compound fields for multi-attribute filtering (category, package type, price range).",
+      keyTakeaways: [
+        "Compound indexing on frequent filter criteria (category + in_stock + price) reduces MongoDB query scan times by over 80%.",
+        "Decoupling cart calculations to the server prevents client-side price tampering while keeping UI state responsive via optimistic updates.",
+        "Role-based access control (RBAC) middleware cleanly separates consumer actions from inventory administration.",
+      ],
+      technicalSnippet:
+        "// MongoDB Compound Index for Hardware Search\nProductSchema.index({ \n  category: 1, \n  inStock: 1, \n  price: 1 \n});",
     },
   },
   {
     id: "xss-note",
-    title: "Stored XSS Attack Mechanics & Defensive Remediation in Flask",
-    category: "Web Security",
-    date: "May 2026",
-    read: "5 min read",
+    title: "What I learned building a sandboxed XSS vulnerability lab",
+    category: "Web security",
+    date: "2026",
+    read: "4 min read",
     snippet:
-      "Analyzing unescaped database injection sinks versus contextual HTML encoding and Content Security Policy (CSP) headers in Python web servers.",
+      "Contrasting unescaped execution sinks with context-aware HTML entity encoding and Content Security Policy (CSP) headers.",
     image:
       "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=85",
     content: {
@@ -88,54 +112,6 @@ export const ENGINEERING_NOTES: EngineeringNote[] = [
       ],
       technicalSnippet:
         "# Hardened HTTP Response Headers\n@app.after_request\ndef apply_security_headers(response):\n    response.headers['Content-Security-Policy'] = \"default-src 'self'; script-src 'self'\"\n    response.headers['X-Content-Type-Options'] = 'nosniff'\n    return response",
-    },
-  },
-  {
-    id: "edgekart-note",
-    title: "Architecting EdgeKart: MERN State Management, JWT Auth & Schema Design",
-    category: "Full-Stack Web",
-    date: "Apr 2026",
-    read: "6 min read",
-    snippet:
-      "Synchronizing cart and wishlist state across authenticated sessions while optimizing MongoDB query indexing for specialized electronics catalogs.",
-    image:
-      "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=1200&q=85",
-    content: {
-      problemStatement:
-        "E-commerce platforms for hardware and electronic parts require handling granular product specifications (operating voltages, pin configurations, protocols) while maintaining smooth shopping cart synchronization across devices.",
-      architectureOverview:
-        "Built with React and TypeScript on the frontend communicating with an Express.js REST API. User sessions are secured using JSON Web Tokens (JWT). Product data is stored in MongoDB with indexed compound fields for multi-attribute filtering (category, package type, price range).",
-      keyTakeaways: [
-        "Compound indexing on frequent filter criteria (e.g. category + in_stock + price) reduces MongoDB query scan times by over 80%.",
-        "Decoupling cart calculations to the server prevents client-side price tampering while keeping UI state responsive via optimistic updates.",
-        "Role-based access control (RBAC) middleware cleanly separates consumer actions from inventory administration.",
-      ],
-      technicalSnippet:
-        "// MongoDB Compound Index for Hardware Search\nProductSchema.index({ \n  category: 1, \n  inStock: 1, \n  price: 1 \n});",
-    },
-  },
-  {
-    id: "portflow-note",
-    title: "Multi-Stage Workflow Systems: Designing Resilient Onboarding in PortFlow",
-    category: "System Design",
-    date: "Mar 2026",
-    read: "5 min read",
-    snippet:
-      "Structuring multi-step validated form lifecycles, PostgreSQL document tracking schemas, and Docker microservice setups.",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=85",
-    content: {
-      problemStatement:
-        "Customs broker and importer onboarding involves numerous regulatory checkpoints, document validations, and asynchronous compliance statuses that cannot be solved with a simple static contact form.",
-      architectureOverview:
-        "PortFlow models onboarding as an explicit state machine with distinct stages (Company Profile → Regulatory Identifiers → Document Uploads → Compliance Review). Backend services are written in FastAPI with a PostgreSQL relational database, orchestrated locally via Docker Compose.",
-      keyTakeaways: [
-        "Relational schemas with foreign key constraints ensure document records cannot be orphaned during partial onboarding submissions.",
-        "Form wizards require granular client-side schema validation (Zod/TypeScript) paired with strict server-side model validation (Pydantic).",
-        "Audit log tables tracking every status transition provide crucial compliance history for regulatory workflows.",
-      ],
-      technicalSnippet:
-        "-- Relational Status Tracking Schema\nCREATE TABLE onboarding_audit_logs (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  importer_id UUID REFERENCES importers(id) ON DELETE CASCADE,\n  previous_status VARCHAR(50),\n  new_status VARCHAR(50) NOT NULL,\n  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()\n);",
     },
   },
 ];
@@ -187,18 +163,25 @@ export default function NoteModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[9990] flex h-screen w-screen overflow-hidden bg-bg/90 backdrop-blur-2xl"
+          className="fixed inset-0 z-[9990] flex h-screen w-screen overflow-hidden bg-bg/95 backdrop-blur-2xl"
           onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-label={note.title}
         >
           <div
             className="relative h-full w-full overflow-y-auto overflow-x-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Sticky Header */}
-            <div className="sticky top-0 z-[9995] flex items-center justify-between border-b border-stroke/60 bg-bg/85 px-6 py-4 backdrop-blur-md md:px-12">
+            <div className="sticky top-0 z-[9995] flex items-center justify-between border-b border-stroke/70 bg-bg/90 px-6 py-4 backdrop-blur-md md:px-12">
               <div className="flex items-center gap-3">
-                <span className="rounded-full border border-[#89aacc]/30 bg-[#89aacc]/10 px-3 py-0.5 text-xs font-mono text-[#89aacc]">
+                <span className="text-xs text-text-primary">
                   {note.category}
+                </span>
+                <span className="text-stroke">•</span>
+                <span className="text-xs text-muted">
+                  {note.read}
                 </span>
               </div>
 
@@ -230,7 +213,6 @@ export default function NoteModal({
                 <button
                   onClick={onClose}
                   className="ml-2 flex items-center gap-1.5 rounded-full border border-stroke bg-surface px-4 py-1.5 font-mono text-xs text-text-primary transition hover:border-white/40 hover:bg-stroke"
-                  data-cursor="close"
                   aria-label="Close article modal"
                 >
                   <span>Close</span>
@@ -240,9 +222,9 @@ export default function NoteModal({
             </div>
 
             {/* Article Content */}
-            <div className="mx-auto max-w-[850px] px-6 pb-20 pt-8 md:px-12 md:pb-28 md:pt-12">
+            <div className="mx-auto max-w-[800px] px-6 pb-20 pt-8 md:px-12 md:pb-28 md:pt-12">
               {/* Meta */}
-              <div className="flex items-center gap-3 font-mono text-xs text-muted mb-3">
+              <div className="flex items-center gap-3 text-xs text-muted mb-4">
                 <span className="text-[#89aacc]">{note.category}</span>
                 <span>•</span>
                 <span>{note.date}</span>
@@ -251,56 +233,48 @@ export default function NoteModal({
               </div>
 
               {/* Title */}
-              <h1 className="font-display text-4xl italic leading-tight text-text-primary md:text-5xl lg:text-6xl">
+              <h1 className="font-display text-3xl italic leading-tight text-text-primary sm:text-5xl md:text-6xl">
                 {note.title}
               </h1>
 
-              {/* Cover Image */}
-              <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-3xl border border-stroke bg-surface">
-                <img
-                  src={note.image}
-                  alt={note.title}
-                  className="h-full w-full object-cover"
-                />
-                <div className="halftone absolute inset-0 opacity-20 mix-blend-multiply pointer-events-none" />
-              </div>
+              <div className="my-8 border-b border-stroke/70" />
 
               {/* Body */}
-              <div className="mt-12 space-y-8 text-sm md:text-base leading-relaxed text-muted">
+              <div className="space-y-10 text-sm leading-relaxed text-muted md:text-base">
                 <div>
-                  <h2 className="text-xs uppercase tracking-wider font-mono text-text-primary mb-2">
-                    The Problem & Context
+                  <h2 className="text-xs uppercase tracking-wider text-text-primary mb-3">
+                    Problem & context
                   </h2>
-                  <p className="leading-7">{note.content.problemStatement}</p>
+                  <p className="leading-7 text-text-primary/90">{note.content.problemStatement}</p>
                 </div>
 
                 <div>
-                  <h2 className="text-xs uppercase tracking-wider font-mono text-text-primary mb-2">
-                    Architectural Approach
+                  <h2 className="text-xs uppercase tracking-wider text-text-primary mb-3">
+                    Architecture & approach
                   </h2>
                   <p className="leading-7">{note.content.architectureOverview}</p>
                 </div>
 
                 {note.content.technicalSnippet && (
                   <div>
-                    <h2 className="text-xs uppercase tracking-wider font-mono text-text-primary mb-2">
-                      Code Pattern / Schema
+                    <h2 className="text-xs uppercase tracking-wider text-text-primary mb-3">
+                      Code snippet
                     </h2>
-                    <div className="overflow-x-auto rounded-2xl border border-stroke bg-surface/80 p-5 font-mono text-xs text-text-primary/90 leading-6">
-                      <pre className="font-mono">{note.content.technicalSnippet}</pre>
-                    </div>
+                    <pre className="overflow-x-auto rounded-2xl border border-stroke/70 bg-bg/95 p-5 font-mono text-xs text-text-primary/90 leading-6">
+                      <code>{note.content.technicalSnippet}</code>
+                    </pre>
                   </div>
                 )}
 
                 <div>
-                  <h2 className="text-xs uppercase tracking-wider font-mono text-text-primary mb-2">
-                    Key Lessons Learned
+                  <h2 className="text-xs uppercase tracking-wider text-text-primary mb-3">
+                    Key takeaways
                   </h2>
-                  <ul className="space-y-2.5">
-                    {note.content.keyTakeaways.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2.5 text-sm leading-6">
-                        <span className="font-mono text-[#89aacc] mt-0.5 shrink-0">▸</span>
-                        <span>{item}</span>
+                  <ul className="space-y-3">
+                    {note.content.keyTakeaways.map((point, pIdx) => (
+                      <li key={pIdx} className="flex items-start gap-3 text-sm leading-6">
+                        <span className="text-muted mt-0.5 shrink-0">—</span>
+                        <span>{point}</span>
                       </li>
                     ))}
                   </ul>
@@ -308,7 +282,7 @@ export default function NoteModal({
               </div>
 
               {/* Bottom Nav */}
-              <div className="mt-16 flex items-center justify-between border-t border-stroke pt-6">
+              <div className="mt-16 flex items-center justify-between border-t border-stroke/70 pt-6">
                 <button
                   onClick={() =>
                     noteIndex !== null &&
@@ -318,7 +292,7 @@ export default function NoteModal({
                   disabled={noteIndex === 0}
                   className="font-mono text-xs text-muted hover:text-text-primary disabled:opacity-30"
                 >
-                  ← Previous Article
+                  ← Previous Note
                 </button>
                 <button
                   onClick={onClose}
@@ -335,7 +309,7 @@ export default function NoteModal({
                   disabled={noteIndex === ENGINEERING_NOTES.length - 1}
                   className="font-mono text-xs text-muted hover:text-text-primary disabled:opacity-30"
                 >
-                  Next Article →
+                  Next Note →
                 </button>
               </div>
             </div>

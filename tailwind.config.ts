@@ -20,6 +20,11 @@ export default {
         "stroke-subtle": "hsl(var(--stroke-subtle))",
         accent: "hsl(var(--accent))",
       },
+      transitionTimingFunction: {
+        editorial: "cubic-bezier(0.22, 1, 0.36, 1)",
+        cinematic: "cubic-bezier(0.16, 1, 0.3, 1)",
+        snappy: "cubic-bezier(0.25, 0.1, 0.25, 1)",
+      },
       animation: {
         "scroll-down": "scroll-down 1.8s ease-in-out infinite",
         "role-fade-in": "role-fade-in 0.4s ease-out",

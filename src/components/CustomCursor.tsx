@@ -2,26 +2,23 @@ import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motio
 import { useEffect, useState } from "react";
 
 export default function CustomCursor() {
-  const [hoverType, setHoverType] = useState<"default" | "link" | "view" | "close">("default");
-  const [isMobile, setIsMobile] = useState(true);
+  const [hoverType, setHoverType] = useState<"default" | "link" | "view">("default");
+  const [isTouch, setIsTouch] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
 
-  // Position values for the cursor
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  // Smooth springs for the outer lag ring
-  const springConfig = { stiffness: 220, damping: 28, mass: 0.4 };
+  const springConfig = { stiffness: 300, damping: 28, mass: 0.3 };
   const ringX = useSpring(mouseX, springConfig);
   const ringY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
-    // Check if device supports fine pointer (mouse/trackpad)
     const mediaQuery = window.matchMedia("(pointer: fine)");
-    setIsMobile(!mediaQuery.matches);
+    setIsTouch(!mediaQuery.matches);
 
     const handleMediaChange = (e: MediaQueryListEvent) => {
-      setIsMobile(!e.matches);
+      setIsTouch(!e.matches);
     };
 
     mediaQuery.addEventListener("change", handleMediaChange);
@@ -31,7 +28,7 @@ export default function CustomCursor() {
   }, []);
 
   useEffect(() => {
-    if (isMobile) return;
+    if (isTouch) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
@@ -56,8 +53,6 @@ export default function CustomCursor() {
         const cursorVal = trigger.getAttribute("data-cursor");
         if (cursorVal === "view") {
           setHoverType("view");
-        } else if (cursorVal === "close") {
-          setHoverType("close");
         } else {
           setHoverType("link");
         }
@@ -77,91 +72,60 @@ export default function CustomCursor() {
       document.removeEventListener("mouseenter", handleMouseEnter);
       window.removeEventListener("mouseover", handleMouseOver);
     };
-  }, [isMobile, isVisible, mouseX, mouseY]);
+  }, [isTouch, isVisible, mouseX, mouseY]);
 
-  if (isMobile || !isVisible) return null;
-
-  // Variants for outer ring sizing and style based on hover type
-  const ringVariants = {
-    default: {
-      width: 36,
-      height: 36,
-      backgroundColor: "transparent",
-      borderColor: "rgba(255, 255, 255, 0.25)",
-      borderWidth: 1,
-    },
-    link: {
-      width: 54,
-      height: 54,
-      backgroundColor: "rgba(137, 170, 204, 0.1)",
-      borderColor: "rgba(137, 170, 204, 0.7)",
-      borderWidth: 1,
-      scale: 1.05,
-    },
-    view: {
-      width: 76,
-      height: 76,
-      backgroundColor: "rgba(137, 170, 204, 0.95)",
-      borderColor: "rgba(137, 170, 204, 0.95)",
-      borderWidth: 0,
-    },
-    close: {
-      width: 76,
-      height: 76,
-      backgroundColor: "rgba(255, 255, 255, 0.95)",
-      borderColor: "rgba(255, 255, 255, 0.95)",
-      borderWidth: 0,
-    },
-  };
+  if (isTouch || !isVisible) return null;
 
   return (
     <>
-      {/* Inner Pin Dot */}
+      {/* Subtle Inner Pin Dot */}
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[99999] size-2 rounded-full bg-text-primary/70 mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[99999] size-1.5 rounded-full bg-white mix-blend-difference"
         style={{
           x: mouseX,
           y: mouseY,
           translateX: "-50%",
           translateY: "-50%",
         }}
-        transition={{ type: "tween", ease: "linear", duration: 0 }}
       />
 
-      {/* Smooth Outer Follower Ring */}
+      {/* Outer Follower Ring */}
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[99998] flex items-center justify-center rounded-full border border-solid text-center mix-blend-normal"
+        className="pointer-events-none fixed left-0 top-0 z-[99998] flex items-center justify-center rounded-full border border-white/20"
         style={{
           x: ringX,
           y: ringY,
           translateX: "-50%",
           translateY: "-50%",
         }}
-        animate={hoverType}
-        variants={ringVariants}
-        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+        animate={{
+          width: hoverType === "view" ? 64 : hoverType === "link" ? 44 : 28,
+          height: hoverType === "view" ? 64 : hoverType === "link" ? 44 : 28,
+          borderColor:
+            hoverType === "view"
+              ? "rgba(255, 255, 255, 0.7)"
+              : hoverType === "link"
+              ? "rgba(137, 170, 204, 0.6)"
+              : "rgba(255, 255, 255, 0.2)",
+          backgroundColor:
+            hoverType === "view"
+              ? "rgba(255, 255, 255, 0.08)"
+              : hoverType === "link"
+              ? "rgba(137, 170, 204, 0.05)"
+              : "transparent",
+        }}
+        transition={{ type: "spring", stiffness: 350, damping: 25 }}
       >
         <AnimatePresence>
           {hoverType === "view" && (
             <motion.span
-              initial={{ opacity: 0, scale: 0.6 }}
+              initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.6 }}
-              transition={{ duration: 0.15 }}
-              className="font-mono text-[9px] font-bold tracking-widest text-[#0a0a0a]"
+              exit={{ opacity: 0, scale: 0.7 }}
+              transition={{ duration: 0.12 }}
+              className="font-mono text-[9px] uppercase tracking-widest text-white/90"
             >
-              VIEW
-            </motion.span>
-          )}
-          {hoverType === "close" && (
-            <motion.span
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.6 }}
-              transition={{ duration: 0.15 }}
-              className="font-mono text-[9px] font-bold tracking-widest text-[#0a0a0a]"
-            >
-              CLOSE
+              View
             </motion.span>
           )}
         </AnimatePresence>
